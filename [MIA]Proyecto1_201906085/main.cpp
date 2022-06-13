@@ -4,67 +4,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
-#include <vector>
-#include "analizador.cpp"
+#include "mkdisk.cpp"
+
 
 using namespace std;
 
 
-string split(string str, char del){
-    
-    string temp = "";
-    string temp1 = "";
-    string spliteo[2];
-    for(int i=0; i<(int)str.size(); i++){
-        
-         if(str[i] != del){
-            temp += str[i];
-        }
-          else{
-            //cout << temp << " ";
-              temp1=temp;
-              temp = "";
-        }
-    }
-      //cout<< "-------------split---------\n" ;
-      //cout<< temp1<<temp;
-      spliteo[0]=temp1;
-      spliteo[1]=temp;
-      /*for(int i=0; i<2;i++){
-        cout << "<>"<< spliteo[i]<<"\n";
-      }*/
-      
-      return spliteo[1];
-
-
-      //analizador(temp);
-
-}
-
-
-char encontrarSigno(char *cadena){
-
-  int cantidad= strlen(cadena);
-  //cout<<cantidad<<endl;
-  char resultado;
-
-  for (int i = 0; i < cantidad; i++){
-    if(cadena[i]=='$'){
-      resultado='$';
-      break;
-    }else if (cadena[i]=='@'){
-      resultado='@';
-      break;
-    }
-    
-  }
-  std::cout<<resultado<<endl;
-  return resultado;
-  
 
 
 
-}
 
 string minuscula(string cadena) {
   for (int i = 0; i < cadena.length(); i++) cadena[i] = tolower(cadena[i]);
@@ -74,7 +22,7 @@ string minuscula(string cadena) {
 
 
 void command(char *command){
-  //char cadena[100] = "patatas#fritas#con#ketchup#y#mayonesa";
+  
   string path;
   
   char *token = std::strtok(command, " ");
@@ -101,7 +49,7 @@ void command(char *command){
     
   }else if (strcasecmp(token,"mkdisk")==0){
     string a_mkdisk[3];
-    //Mkdisk $size=>32 $path=>”/home/mi user/” $name=>Disco1.dsk
+    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco1.dsk
     int cont=0;
     
     token = std::strtok(NULL, ">");
@@ -143,11 +91,15 @@ void command(char *command){
           cout<<"Falta algun parametro en mkdisk"<<endl;
           
         }
+        
     }
-    cout<<"--ARREGLO MKDISK--"<<endl;
-    for (int i = 0; i < cont; i++){
-      cout<<a_mkdisk[i]<<endl;
+
+    if(cont==3){
+     crearDisco(a_mkdisk);
+    }else{
+      cout<<"No se pudo crear disco"<<endl;
     }
+    
   
   }else if (strcasecmp(token,"rmdisk")==0){
     //rmDisk $path=>"/home/mis discos/Disco_4.dsk"
@@ -405,7 +357,7 @@ void command(char *command){
     }*/
     //cout<<"--"<<contador<<endl;
     //std::cout<<token[3]<<endl;
-    std::vector<string> a_unmount;
+    
     token = std::strtok(NULL, ">");
     
     while(token){
