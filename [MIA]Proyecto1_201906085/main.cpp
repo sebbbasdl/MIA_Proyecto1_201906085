@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
-#include "mkdisk.cpp"
+#include "funciones.cpp"
+
 
 
 using namespace std;
@@ -115,7 +116,7 @@ void command(char *command){
 
   }else if (strcasecmp(token,"fdisk")==0){
     //fdisk $sizE=>1 @type=>L @unit=>xd @fit=>bf $path=>”/mis discos/Disco3.dsk” $name=>Particion3
-    //fdisk @tYpE=>E $path=>”/home/Disco2.dsk” $name=>Part3 @Unit=>K $sizE=>200
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K $sizE=>200
     /*Arreglo fdisk 
     Posicion:
     0   -size
@@ -269,6 +270,7 @@ void command(char *command){
       cout<<"Add correcto"<<endl;
     }else if( fadd==false && fdelete==false && fpath==true && fname==true && fsize== true){
       cout<<"Particion correcta"<<endl;
+      crearParticion(a_fdisk);
     }else{
       cout<<"Existe un error en fdisk"<<endl;
     }
