@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <cstring>
+#include <algorithm>
 #include "funciones.cpp"
 
 
 
 using namespace std;
-
 
 
 
@@ -116,7 +116,10 @@ void command(char *command){
 
   }else if (strcasecmp(token,"fdisk")==0){
     //fdisk $sizE=>1 @type=>L @unit=>xd @fit=>bf $path=>”/mis discos/Disco3.dsk” $name=>Particion3
-    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K $sizE=>200
+    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco1.dsk
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part4 @Unit=>K @fit=>wf $sizE=>200
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part2 @Unit=>K @fit=>bf $sizE=>200
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
     /*Arreglo fdisk 
     Posicion:
     0   -size
@@ -190,7 +193,7 @@ void command(char *command){
         
         }else if (strcasecmp(token,"@unit=")==0){
           token = std::strtok(NULL, " ");
-          cout<<"tu madre"<<endl;
+          
           std::cout << token << ' '<<endl;
           if(strcasecmp(token,"b")==0 || strcasecmp(token,"k")==0|| strcasecmp(token,"m")==0){
             
@@ -403,8 +406,10 @@ void terminal(){
 
 
 int main(){
-  
+  /*int arreglo[4] = {100,5,6,21};
+  ordenar(4,arreglo);*/
   terminal();
+
   
     /*string dato;
     string path;

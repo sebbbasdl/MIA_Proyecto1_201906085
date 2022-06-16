@@ -5,12 +5,21 @@
 #include <string.h>
 #include <time.h>
 #include <cstring>
+#include <algorithm>
 #include "strucs.cpp"
 
 
 using namespace std;
 
+int ordenar(int TAMANYO, int datos[]){
+  
+      sort(datos, datos + TAMANYO);
+      cout << "Datos ordenados: ";
+      for (int i = 0; i != TAMANYO; ++i)
+          cout << datos[i] << " ";
 
+      return datos[TAMANYO];
+}
 
 bool existeE(MBR mbr){
     if(mbr.mbr_partition_1.part_type == 'E'|| mbr.mbr_partition_2.part_type == 'E'
@@ -111,14 +120,33 @@ void crearDisco(string a_mkdisk2[]){
     mbr.mbr_tamano=size*1024*1024;
     mbr.mbr_disk_signature=rand()%16;
     mbr.mbr_fecha_creacion=time(nullptr);
-    cout<<"jijijija"<<endl;
-    mbr.mbr_partition_1.part_status='0';
-    cout<<"jijijija 2"<<endl;
+    mbr.mbr_partition_1.part_status='e';
     mbr.mbr_partition_1.part_fit='-';
     mbr.mbr_partition_1.part_name[0]='\0';
     mbr.mbr_partition_1.part_size=-1;
     mbr.mbr_partition_1.part_start=-1;
     mbr.mbr_partition_1.part_type='-';
+    
+    mbr.mbr_partition_2.part_status='e';
+    mbr.mbr_partition_2.part_fit='-';
+    mbr.mbr_partition_2.part_name[0]='\0';
+    mbr.mbr_partition_2.part_size=-1;
+    mbr.mbr_partition_2.part_start=-1;
+    mbr.mbr_partition_2.part_type='-';
+
+    mbr.mbr_partition_3.part_status='e';
+    mbr.mbr_partition_3.part_fit='-';
+    mbr.mbr_partition_3.part_name[0]='\0';
+    mbr.mbr_partition_3.part_size=-1;
+    mbr.mbr_partition_3.part_start=-1;
+    mbr.mbr_partition_3.part_type='-';
+
+    mbr.mbr_partition_4.part_status='e';
+    mbr.mbr_partition_4.part_fit='-';
+    mbr.mbr_partition_4.part_name[0]='\0';
+    mbr.mbr_partition_4.part_size=-1;
+    mbr.mbr_partition_4.part_start=-1;
+    mbr.mbr_partition_4.part_type='-';
     /*mbr.mbr_partition_2=NULL;
     mbr.mbr_partition_3=NULL;
     mbr.mbr_partition_4=NULL;*/
@@ -236,97 +264,364 @@ void crearParticion(string a_fkdisk2[]){
             //se puede crear particion extendida o primaria
             cout<<"hola 7"<<endl;
             bool hayespacio=false;
-            int espacio;
+            int espaciototal=mbr.mbr_tamano - sizeof(mbr);
+            int arreglo_espacios[4];
+            int esp1=0;
+            int esp2=0;
+            int esp3=0;
+            int esp4=0;
 
-            if(mbr.mbr_partition_1.part_status=='0'){
-                cout<<"hola 8"<<endl;
-                
-                mbr.mbr_partition_1.part_start= sizeof(mbr);
-                espacio=mbr.mbr_tamano - sizeof(mbr);
-                cout<<mbr.mbr_tamano<<"----"<<sizeof(mbr)<<"="<<espacio<<endl;
-                
-                if(mbr.mbr_partition_1.part_status=='1'){
-                    cout<<"hola 9"<<endl;
-                    espacio=mbr.mbr_partition_1.part_start - sizeof(mbr);
-                    cout<<espacio<<endl;
+            int arr1=0;
+            int arr2=0;
+            int arr3=0;
+            int arr4=0;
 
+            if(mbr.mbr_partition_1.part_status=='e' && mbr.mbr_partition_2.part_status=='e' && mbr.mbr_partition_3.part_status=='e' && mbr.mbr_partition_4.part_status=='e' ){
+                cout<<"entre 0"<<endl;
+                if(sizefdisk<= espaciototal){
+                    cout<<"entre"<<endl;
+                    cout<<mbr.mbr_tamano<<endl;
+                    cout<<espaciototal<<endl;
+                    mbr.mbr_partition_1.part_status='0';
+                    mbr.mbr_partition_1.part_fit=*a_fkdisk2[5].c_str();
+                    strcpy(mbr.mbr_partition_1.part_name,a_fkdisk2[2].c_str());
+                    mbr.mbr_partition_1.part_size=sizefdisk;
+                    mbr.mbr_partition_1.part_start=espaciototal;
+                    mbr.mbr_partition_1.part_type=*a_fkdisk2[4].c_str();
 
-                }else if(mbr.mbr_partition_2.part_status=='0'){
-                    espacio=mbr.mbr_partition_2.part_start - sizeof(mbr);
+                    std::cout<<mbr.mbr_partition_1.part_status<<endl;
 
-                }else if(mbr.mbr_partition_3.part_status=='0'){
-                    espacio=mbr.mbr_partition_3.part_start - sizeof(mbr);
-
-                }else if(mbr.mbr_partition_4.part_status=='0'){
-                    espacio=mbr.mbr_partition_4.part_start - sizeof(mbr);
+                    rewind(file);
+                    fwrite(&mbr,sizeof(MBR),1,file);
                 }
-
-                cout<<"hola 10 "<< sizefdisk<<"---" << espacio<<endl;
-                if(sizefdisk <= espacio){
-                    hayespacio=true;
-                    
-                }
-
-            }else if(mbr.mbr_partition_2.part_status=='0'){
-                mbr.mbr_partition_2.part_start=mbr.mbr_partition_1.part_start+mbr.mbr_partition_1.part_size;
-                espacio= mbr.mbr_tamano-mbr.mbr_partition_2.part_start;
-
-                if(mbr.mbr_partition_1.part_status=='0'){
-                    espacio=mbr.mbr_partition_1.part_start - mbr.mbr_partition_2.part_start;
-                }
-
-                if(sizefdisk<=espacio){
-                    hayespacio=true;
-                }
-
-
-            }else if(mbr.mbr_partition_3.part_status=='0'){
-                mbr.mbr_partition_3.part_start=mbr.mbr_partition_2.part_start+mbr.mbr_partition_2.part_size;
-                espacio= mbr.mbr_tamano-mbr.mbr_partition_3.part_start;
-
-                if(mbr.mbr_partition_1.part_status=='0'){
-                    espacio=mbr.mbr_partition_2.part_start -mbr.mbr_partition_3.part_start;
-                }
-
-                if(sizefdisk<=espacio){
-                    hayespacio=true;
-                }
-
-            }else if(mbr.mbr_partition_4.part_status=='0'){
-                mbr.mbr_partition_4.part_start=mbr.mbr_partition_3.part_start+mbr.mbr_partition_3.part_size;
-                espacio= mbr.mbr_tamano-mbr.mbr_partition_4.part_start;
-
-                if(mbr.mbr_partition_1.part_status=='0'){
-                    espacio=mbr.mbr_partition_3.part_start -mbr.mbr_partition_4.part_start;
-                }
-
-                if(sizefdisk<=espacio){
-                    hayespacio=true;
-                }
-
-            }
-
-            if(hayespacio==true){
-                cout<<"hola 10"<<endl;
-
-                //char type=a_fkdisk2[4].c_str();
-                partition* part = (partition*) malloc(sizeof(partition));
-                part->part_status='0';
-                part->part_type= *a_fkdisk2[4].c_str();
-                part->part_fit=*a_fkdisk2[5].c_str();
-                part->part_start=espacio;
-                part->part_size= sizefdisk;
-                strcpy(part->part_name,a_fkdisk2[2].c_str());
-                if(mbr.mbr_partition_1.part_status == '0') mbr.mbr_partition_1 = *part;
-                else if(mbr.mbr_partition_2.part_status == '0') mbr.mbr_partition_2 = *part;
-                else if(mbr.mbr_partition_3.part_status == '0') mbr.mbr_partition_3 = *part;
-                else if(mbr.mbr_partition_4.part_status == '0') mbr.mbr_partition_4 = *part;
-
-                rewind(file);
-                fwrite(&mbr,sizeof(MBR),1,file);
             }else{
-                cout<<"no se pudo crear particion"<<endl;
+                cout<<"else"<<endl;
+                if(mbr.mbr_partition_1.part_status!='e'){
+                    esp1=mbr.mbr_partition_1.part_size;
+                    arr1=mbr.mbr_partition_1.part_start;
+                }
+
+                if(mbr.mbr_partition_2.part_status!='e'){
+                    esp2=mbr.mbr_partition_2.part_size;
+                    arr2=mbr.mbr_partition_2.part_start;
+                }
+
+                if(mbr.mbr_partition_3.part_status!='e'){
+                    esp3=mbr.mbr_partition_3.part_size;
+                    arr3=mbr.mbr_partition_3.part_start;
+                }
+
+                if(mbr.mbr_partition_4.part_status!='e'){
+                    esp4=mbr.mbr_partition_4.part_size;
+                    arr4=mbr.mbr_partition_4.part_start;
+                }
+
+                espaciototal=mbr.mbr_tamano - sizeof(mbr) - esp1 -esp2 -esp3 -esp4;
+                cout<<sizefdisk<<"----"<<espaciototal<<endl;
+                if(sizefdisk<=espaciototal){
+                    cout<<"entre compa"<<endl;
+                    arreglo_espacios[0]=esp1;
+                    arreglo_espacios[1]=esp2;
+                    arreglo_espacios[2]=esp3;
+                    arreglo_espacios[3]=esp4;
+
+                    int arreglo_start[4];
+
+                    arreglo_start[0]=arr1;
+                    arreglo_start[1]=arr2;
+                    arreglo_start[2]=arr3;
+                    arreglo_start[3]=arr4;
+
+
+                    int espaciodispo;
+                    int arreglolibre[4];
+                    for (int i = 0; i < 4; i++){
+
+    
+                        arreglo_start[i]=arreglo_start[i-1]+arreglo_espacios[i-1];
+                        espaciodispo=mbr.mbr_tamano -arreglo_start[i];
+                        
+                        
+                        
+                        for (int j = i; j < 4; j++){
+                            if(arreglo_espacios[j]!=0){
+                                espaciodispo=arreglo_start[j] - arreglo_start[i];
+                                break;
+                                
+                                
+                            }
+
+                                
+                        }
+                        
+                        arreglolibre[i]=espaciodispo;
+                        
+                            
+                        
+                    }
+                    
+                    for(int x=0; x<4; x++){
+                        cout<<"arreglo LIBRE"<<endl;
+                        cout<<arreglolibre[x]<<endl;
+                    }
+
+                    if(a_fkdisk2[5]=="ff"){
+
+                        for (int i = 0; i < 4; i++){
+                            if(sizefdisk<=arreglolibre[i]){
+                                if(i==0){
+                                    mbr.mbr_partition_1.part_status='0';
+                                    mbr.mbr_partition_1.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_1.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_1.part_size=sizefdisk;
+                                    mbr.mbr_partition_1.part_start=espaciototal;
+                                    mbr.mbr_partition_1.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==1){
+                                    mbr.mbr_partition_2.part_status='0';
+                                    mbr.mbr_partition_2.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_2.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_2.part_size=sizefdisk;
+                                    mbr.mbr_partition_2.part_start=espaciototal;
+                                    mbr.mbr_partition_2.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==2){
+                                    mbr.mbr_partition_3.part_status='0';
+                                    mbr.mbr_partition_3.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_3.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_3.part_size=sizefdisk;
+                                    mbr.mbr_partition_3.part_start=espaciototal;
+                                    mbr.mbr_partition_3.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==3){
+                                    mbr.mbr_partition_4.part_status='0';
+                                    mbr.mbr_partition_4.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_4.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_4.part_size=sizefdisk;
+                                    mbr.mbr_partition_4.part_start=espaciototal;
+                                    mbr.mbr_partition_4.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }
+                            }
+                        }
+                        
+
+                        
+
+                    }else if(a_fkdisk2[5]=="bf"){
+                        cout<<"entre bf"<<endl;
+                        sort(arreglolibre, arreglolibre + 4);
+
+                        cout<<"es arreglo ordenado: "<<endl;
+                        for (int i = 0; i < 4; i++){
+                            
+                            cout<<arreglolibre[i]<<endl;
+
+                            if(sizefdisk<=arreglolibre[i]){
+                                
+                                if(i==0){
+                                    mbr.mbr_partition_1.part_status='0';
+                                    mbr.mbr_partition_1.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_1.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_1.part_size=sizefdisk;
+                                    mbr.mbr_partition_1.part_start=espaciototal;
+                                    mbr.mbr_partition_1.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==1){
+                                    mbr.mbr_partition_2.part_status='0';
+                                    mbr.mbr_partition_2.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_2.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_2.part_size=sizefdisk;
+                                    mbr.mbr_partition_2.part_start=espaciototal;
+                                    mbr.mbr_partition_2.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==2){
+                                    mbr.mbr_partition_3.part_status='0';
+                                    mbr.mbr_partition_3.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_3.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_3.part_size=sizefdisk;
+                                    mbr.mbr_partition_3.part_start=espaciototal;
+                                    mbr.mbr_partition_3.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==3){
+                                    mbr.mbr_partition_4.part_status='0';
+                                    mbr.mbr_partition_4.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_4.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_4.part_size=sizefdisk;
+                                    mbr.mbr_partition_4.part_start=espaciototal;
+                                    mbr.mbr_partition_4.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }
+
+                            }
+                            
+                        }
+                        
+
+                        /*int espaciopart;
+                        int sizepart;
+                        int startpart;
+
+                        for (int i = 0; i < 4; i++){
+                            if(arreglo_espacios[i]!=0 ){
+                                sizepart=arreglo_espacios[i];
+
+                                if(i==0){
+                                    startpart=mbr.mbr_partition_1.part_start ;
+                                    
+                                }else if(i==1){
+                                    startpart=mbr.mbr_partition_2.part_start ;
+                                    //arreglo_libre[1]=startpart;
+                                }else if(i==2){
+                                    startpart=mbr.mbr_partition_3.part_start ;
+                                    //arreglo_libre[2]=startpart;
+                                }else if(i==3){
+                                    startpart=mbr.mbr_partition_4.part_start ;
+                                    //arreglo_libre[3]=startpart;
+                                }
+                                espaciopart=sizepart+startpart;
+                                
+                                
+                            }
+                        }*/
+                        
+                        
+                    
+
+                    }else if(a_fkdisk2[5]=="wf"){
+                        cout<<"entre bf"<<endl;
+                        
+                        sort(arreglolibre, arreglolibre + 4);
+
+                        cout<<"es arreglo ordenado: "<<endl;
+                        int cont1=0;
+                        for (int i = 1; i<=4 ; i++){
+                            cont1=4-i;
+                            cout<<arreglolibre[cont1]<<endl;
+
+                            if(sizefdisk<=arreglolibre[i]){
+                                
+                                if(i==0){
+                                    mbr.mbr_partition_1.part_status='0';
+                                    mbr.mbr_partition_1.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_1.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_1.part_size=sizefdisk;
+                                    mbr.mbr_partition_1.part_start=espaciototal;
+                                    mbr.mbr_partition_1.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==1){
+                                    mbr.mbr_partition_2.part_status='0';
+                                    mbr.mbr_partition_2.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_2.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_2.part_size=sizefdisk;
+                                    mbr.mbr_partition_2.part_start=espaciototal;
+                                    mbr.mbr_partition_2.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==2){
+                                    mbr.mbr_partition_3.part_status='0';
+                                    mbr.mbr_partition_3.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_3.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_3.part_size=sizefdisk;
+                                    mbr.mbr_partition_3.part_start=espaciototal;
+                                    mbr.mbr_partition_3.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }else if(i==3){
+                                    mbr.mbr_partition_4.part_status='0';
+                                    mbr.mbr_partition_4.part_fit=*a_fkdisk2[5].c_str();
+                                    strcpy(mbr.mbr_partition_4.part_name,a_fkdisk2[2].c_str());
+                                    mbr.mbr_partition_4.part_size=sizefdisk;
+                                    mbr.mbr_partition_4.part_start=espaciototal;
+                                    mbr.mbr_partition_4.part_type=*a_fkdisk2[4].c_str();
+
+                                    //std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                                    rewind(file);
+                                    fwrite(&mbr,sizeof(MBR),1,file);
+                                    break;
+
+                                }
+
+                            }
+                            
+                        }
+
+                    }
+                }
+
+
             }
+
+
+
+
+
+            
 
             
 
@@ -344,9 +639,29 @@ void crearParticion(string a_fkdisk2[]){
     fseek(file,0,SEEK_SET);
     fread(&mbr2,sizeof(MBR),1,file);
 
-    std::cout<<mbr2.mbr_partition_1.part_name<<endl;
 
+    cout<<"---------------"<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_fit<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_name<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_size<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_start<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_status<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_type<<endl;
+
+
+    cout<<"---------------"<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_fit<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_name<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_size<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_start<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_status<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_type<<endl;
     fclose(file);    
 
 
 }
+
+
+    
+            
+    
