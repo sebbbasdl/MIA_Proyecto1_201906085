@@ -50,7 +50,7 @@ void command(char *command){
     
   }else if (strcasecmp(token,"mkdisk")==0){
     string a_mkdisk[3];
-    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco1.dsk
+    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
     int cont=0;
     
     token = std::strtok(NULL, ">");
@@ -103,7 +103,7 @@ void command(char *command){
     
   
   }else if (strcasecmp(token,"rmdisk")==0){
-    //rmDisk $path=>"/home/mis discos/Disco_4.dsk"
+    //rmDisk $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk"
     token = std::strtok(NULL, "\"");
     std::cout << token << ' '<<endl;
 
@@ -113,6 +113,7 @@ void command(char *command){
     path=token;
     cout<<"El disco a eliminar es: "+path<<endl;
     
+    rmdisk(path);
 
   }else if (strcasecmp(token,"fdisk")==0){
     //fdisk $sizE=>1 @type=>L @unit=>xd @fit=>bf $path=>”/mis discos/Disco3.dsk” $name=>Particion3
@@ -120,6 +121,9 @@ void command(char *command){
     //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part4 @Unit=>K @fit=>wf $sizE=>200
     //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part2 @Unit=>K @fit=>bf $sizE=>200
     //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+
+    
+    //fdisk @add=>2 $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3
     /*Arreglo fdisk 
     Posicion:
     0   -size
@@ -271,6 +275,7 @@ void command(char *command){
       cout<<"Delete correcto"<<endl;
     }else if (fadd==true && fpath==true && fname==true){
       cout<<"Add correcto"<<endl;
+      fdisk_add(a_fdisk);
     }else if( fadd==false && fdelete==false && fpath==true && fname==true && fsize== true){
       cout<<"Particion correcta"<<endl;
       crearParticion(a_fdisk);
@@ -279,9 +284,11 @@ void command(char *command){
     }
     
     
-    cout<<cont<<endl;
+    //cout<<cont<<endl;
+    //cout<<a_fdisk[7]<<endl;
     cout<<"--ARREGLO FDISK--"<<endl;
     a_fdisk[1]+=".dsk";
+
     for (int i = 0; i < cont; i++){
       cout<<a_fdisk[i]<<endl;
     }
@@ -293,9 +300,15 @@ void command(char *command){
   }else if (strcasecmp(token,"mount")==0){
     string a_mount[2];
     bool fmount=true;
+    ////Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
     //Mkdisk $size=>32 $path=>”/home/mi user/” $name=>Disco1.dsk
+    //mount $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part3
+    //fdisk @tYpE=>p $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+
     int cont=0;
-    cout<<fmount<<endl;
+    bool fpath=false;
+    bool fname=false;
+    //cout<<fmount<<endl;
     
     token = std::strtok(NULL, ">");
     while (token){
@@ -317,6 +330,7 @@ void command(char *command){
           token = std::strtok(NULL, ">");
           cont+=1;
           fmount=false;
+          fpath=true;
 
         }else if (strcasecmp(token,"name=")==0 ||strcasecmp(token,"$name=")==0 ){
           token = std::strtok(NULL, " ");
@@ -325,6 +339,7 @@ void command(char *command){
           token = std::strtok(NULL, ">");
           cont+=1;
           fmount=false;
+          fname=true;
 
         }else{
           token=NULL;
@@ -339,8 +354,13 @@ void command(char *command){
 
     if (fmount==true ){
         cout<<"Mostrar arreglo de particiones montadas;"<<endl;
+        onlymount();
 
         
+    }
+
+    if(fname ==true && fpath==true){
+      mount(a_mount);
     }
     
 

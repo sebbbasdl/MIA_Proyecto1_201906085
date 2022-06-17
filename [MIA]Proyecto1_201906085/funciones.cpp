@@ -2,14 +2,19 @@
 #include <cstdlib>
 #include <fstream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <cstring>
 #include <algorithm>
+#include <dirent.h>
+
 #include "strucs.cpp"
 
 
 using namespace std;
+
+string arregloMount[20];
 
 int ordenar(int TAMANYO, int datos[]){
   
@@ -48,6 +53,140 @@ string pathsinC(string prueba[]){
 
 }
 
+string pathsinC2(string prueba[]){
+    string path;
+    int fin = prueba[1].length();
+    for (int i = 0; i < fin; i++){
+        if(prueba[1][i]=='/' || isalpha(prueba[1][i])  || isdigit(prueba[1][i]) || prueba[1][i]=='.') {
+
+            path+=prueba[1][i];
+
+            
+
+        }
+    }
+
+    std::cout<<path<<endl;
+    return path;
+
+}
+
+bool existeDirectorio(string rut){
+    DIR *directorio;
+    if(directorio==opendir(rut.c_str())){
+        closedir(directorio);
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool existeArchivo(string ruta){
+    FILE *archivo;
+    if(archivo==fopen(ruta.c_str(),"r")){
+
+        fclose(archivo);
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void rmdisk(string pathh){
+
+    if(existeArchivo(pathh)==false){
+        cout<<"No se puede eliminar el disco ya que no existe."<<endl;
+    }else{
+        FILE *file;
+        file=fopen(pathh.c_str(),"w");
+        fclose(file);
+
+        remove(pathh.c_str());
+    }
+
+
+}
+
+void mount( string a_mount2[]){
+
+    string aux[2];
+    aux[0]=a_mount2[1];
+    aux[1]=a_mount2[0];
+    string path;
+    path=pathsinC2(aux);
+
+    cout<<path<<endl;
+    FILE *file;
+    file= fopen(path.c_str(),"rb+");
+
+    if(file==NULL){
+        cout<<"El disco al que deseea aplicar mount no existe."<<endl;
+    }else{
+        fseek(file,0,SEEK_SET);
+        MBR mbr;
+        fread(&mbr,sizeof(MBR),1,file);    
+        cout<<mbr.mbr_partition_1.part_name<<endl;
+        if(mbr.mbr_partition_1.part_name==aux[0]){
+            cout<<"entre"<<endl;
+            mbr.mbr_partition_1.part_status='1';
+
+            arregloMount[0]="vda1";
+
+            rewind(file);
+            fwrite(&mbr,sizeof(MBR),1,file);
+        }else if( mbr.mbr_partition_2.part_name==aux[0]){
+            mbr.mbr_partition_1.part_status=='1';
+            arregloMount[1]="vda2";
+
+            rewind(file);
+            fwrite(&mbr,sizeof(MBR),1,file);
+            
+        }else if( mbr.mbr_partition_3.part_name==aux[0]){
+            arregloMount[2]="vda3";
+
+            mbr.mbr_partition_1.part_status=='1';
+            rewind(file);
+            fwrite(&mbr,sizeof(MBR),1,file);
+            
+        }else if( mbr.mbr_partition_4.part_name==aux[0]){
+            arregloMount[2]="vda4";
+            mbr.mbr_partition_1.part_status=='1';
+
+            rewind(file);
+            fwrite(&mbr,sizeof(MBR),1,file);
+            
+        }else{
+            cout<<"Esta particion no existe en el disco con la ruta: "<<aux[1]<<endl;
+        }
+        cout<<"------STATUS----"<<endl;
+        
+        fclose(file);
+
+    }
+
+    file = fopen(path.c_str(),"rb+");
+    MBR mbr2;
+    fseek(file,0,SEEK_SET);
+    fread(&mbr2,sizeof(MBR),1,file);
+
+
+    cout<<"---------------"<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_fit<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_name<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_size<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_start<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_status<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_type<<endl;
+    
+}
+void onlymount(){
+    for (int i = 0; i < 4; i++){
+       cout<< arregloMount[i]<<endl;
+        
+    }
+    
+}
+
 void crearDisco(string a_mkdisk2[]){
     /*
     0 size
@@ -68,6 +207,44 @@ void crearDisco(string a_mkdisk2[]){
     path =pathsinC(a_mkdisk2) + a_mkdisk2[2];
     //char path2[255] = "/tmp/d1.dk";
     std::cout<<path<<endl;
+
+    string arreglopath[30];
+    string dato;
+    int contaa =0;
+
+    cout<<path.length()<<endl;
+    for (int i = 0; i < path.length(); i++){
+        
+        if(path[i] == '/'){
+            
+            arreglopath[contaa]=dato;
+            dato="";
+            contaa+=1;
+        }else{
+            dato+=path[i];
+        }
+    }
+
+
+    cout<<"---------"<<endl;
+    string rutaaux;
+    string rutaaux2;
+    for (int i = 0; i < contaa; i++){
+        rutaaux+="/"+arreglopath[i];
+
+        if(existeDirectorio(rutaaux)==false){
+            string com ="mkdir "+rutaaux2+"/\""+ arreglopath[i]+"\"";
+            cout<<com<<endl;
+            system(com.c_str());
+        }
+        rutaaux2+="/"+arreglopath[i];
+
+    }
+
+
+    
+    
+
 
     /*MBR* mbr = (MBR*) malloc(sizeof(MBR));
     FILE *file;
@@ -208,7 +385,7 @@ void crearParticion(string a_fkdisk2[]){
     if(file==NULL){
         cout<<"El disco no existe."<<endl;
     }else{
-        cout<<"hola 1"<<endl;
+        
         
         fseek(file,0,SEEK_SET);
         MBR mbr;
@@ -661,6 +838,228 @@ void crearParticion(string a_fkdisk2[]){
 
 }
 
+
+void fdisk_add(string a_fdisk3[]){
+    
+    
+    string path;
+    int sizefdisk1=0;
+    path =pathsinC(a_fdisk3);
+    path+=".dsk";
+    FILE *file;
+    file= fopen(path.c_str(),"rb+");
+    
+    if(file==NULL){
+        cout<<"El disco no existe."<<endl;
+    }else{
+        
+        fseek(file,0,SEEK_SET);
+        MBR mbr;
+        fread(&mbr,sizeof(MBR),1,file);
+        
+        int espaciototal=mbr.mbr_tamano - sizeof(mbr);
+        int arreglo_espacios[4];
+        int esp1=0;
+        int esp2=0;
+        int esp3=0;
+        int esp4=0;
+
+        int arr1=0;
+        int arr2=0;
+        int arr3=0;
+        int arr4=0;
+        
+        if(a_fdisk3[3]=="m" || a_fdisk3[3]=="M"  ){
+        //cout<<"hola 3"<<endl;
+        sizefdisk1=stoi(a_fdisk3[7])*1024*1024;
+        }else if(a_fdisk3[3]=="K" || a_fdisk3[3]=="k" ){
+            
+            sizefdisk1=stoi(a_fdisk3[7])*1024;
+            
+        }else if(a_fdisk3[3]=="b" || a_fdisk3[3]=="B" ){
+            
+            sizefdisk1=stoi(a_fdisk3[7]);
+        }    
+
+        cout<<sizefdisk1<<endl;
+
+        if(mbr.mbr_partition_1.part_status!='e'){
+            esp1=mbr.mbr_partition_1.part_size;
+            arr1=mbr.mbr_partition_1.part_start;
+        }
+
+        if(mbr.mbr_partition_2.part_status!='e'){
+            esp2=mbr.mbr_partition_2.part_size;
+            arr2=mbr.mbr_partition_2.part_start;
+        }
+
+        if(mbr.mbr_partition_3.part_status!='e'){
+            esp3=mbr.mbr_partition_3.part_size;
+            arr3=mbr.mbr_partition_3.part_start;
+        }
+
+        if(mbr.mbr_partition_4.part_status!='e'){
+            esp4=mbr.mbr_partition_4.part_size;
+            arr4=mbr.mbr_partition_4.part_start;
+        }
+
+        espaciototal=mbr.mbr_tamano - sizeof(mbr) - esp1 -esp2 -esp3 -esp4;
+        cout<<sizefdisk1<<"----"<<espaciototal<<endl;
+        if(sizefdisk1<=espaciototal){
+            cout<<"entre compa"<<endl;
+            arreglo_espacios[0]=esp1;
+            arreglo_espacios[1]=esp2;
+            arreglo_espacios[2]=esp3;
+            arreglo_espacios[3]=esp4;
+
+            int arreglo_start[4];
+
+            arreglo_start[0]=arr1;
+            arreglo_start[1]=arr2;
+            arreglo_start[2]=arr3;
+            arreglo_start[3]=arr4;
+
+
+            int espaciodispo;
+            int arreglolibre[4];
+            for (int i = 0; i < 4; i++){
+
+
+                arreglo_start[i]=arreglo_start[i-1]+arreglo_espacios[i-1];
+                espaciodispo=mbr.mbr_tamano -arreglo_start[i];
+                
+                
+                
+                for (int j = i; j < 4; j++){
+                    if(arreglo_espacios[j]!=0){
+                        espaciodispo=arreglo_start[j] - arreglo_start[i];
+                        break;
+                        
+                        
+                    }
+
+                        
+                }
+                
+                arreglolibre[i]=espaciodispo;
+                
+                    
+                
+            }
+            
+            for(int x=0; x<4; x++){
+                cout<<"arreglo LIBRE"<<endl;
+                cout<<arreglolibre[x]<<endl;
+            }
+            cout<<a_fdisk3[2]<<endl;
+            int valor =10;
+
+            if(a_fdisk3[2]==mbr.mbr_partition_1.part_name){
+                valor=0;
+
+            }else if(a_fdisk3[2]==mbr.mbr_partition_2.part_name){
+                valor=1;
+
+            }else if(a_fdisk3[2]==mbr.mbr_partition_3.part_name){
+                valor=2;
+
+            }else if(a_fdisk3[2]==mbr.mbr_partition_4.part_name){
+                valor=3;
+
+            }
+
+            if(valor==10){
+                cout<<"El nombre no coincide de la particion a la que desea add espacio"<<endl;
+            }else{
+                if(valor==0){
+                    if(arreglolibre[valor+1]==0){
+                        cout<<"No se puede agregar tamaño en la particion"<<endl;
+                    }else{
+                        
+                        mbr.mbr_partition_1.part_size+=sizefdisk1;
+                        
+
+                        std::cout<<mbr.mbr_partition_1.part_status<<endl;
+
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+
+
+                    }
+            
+                    
+                }else if(valor==1){
+                    if(arreglolibre[valor+1]!=0){
+                        
+                        cout<<"---AGREGANDO VALOR------"<<endl;
+                        mbr.mbr_partition_2.part_size+=sizefdisk1;
+                        
+
+                        std::cout<<mbr.mbr_partition_2.part_size<<endl;
+
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+
+
+                    }else if(arreglolibre[valor-1]!=0){
+                        
+                        cout<<"---AGREGANDO VALOR------"<<endl;
+                        mbr.mbr_partition_2.part_start-=sizefdisk1;
+                        
+                        
+
+                        std::cout<<mbr.mbr_partition_2.part_start<<endl;
+
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+
+
+                    }else{
+                        cout<<"No se pudo agregar tamano a la particion"<<endl;
+                    }
+
+                }
+            }
+
+
+            /*for (int i = 0; i < 4; i++){
+                
+            }*/
+            
+        }
+    }
+
+    fclose(file);
+
+    file = fopen(path.c_str(),"rb+");
+    MBR mbr2;
+    fseek(file,0,SEEK_SET);
+    fread(&mbr2,sizeof(MBR),1,file);
+
+
+    cout<<"---------------"<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_fit<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_name<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_size<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_start<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_status<<endl;
+    std::cout<<mbr2.mbr_partition_1.part_type<<endl;
+
+
+    cout<<"---------------"<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_fit<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_name<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_size<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_start<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_status<<endl;
+    std::cout<<mbr2.mbr_partition_2.part_type<<endl;
+    
+    
+
+}
 
     
             
