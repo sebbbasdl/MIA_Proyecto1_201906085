@@ -1,0 +1,23 @@
+/*hola*\
+
+
+
+Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco1.dsk
+Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco2.dsk
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part1 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part2 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part4 @Unit=>K @fit=>ff $sizE=>200
+
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco2.dsk” $name=>Part1 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco2.dsk” $name=>Part2 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco2.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco2.dsk” $name=>Part4 @Unit=>K @fit=>ff $sizE=>200
+mount $path=>"/home/sebbbasdl/Documentos/Disco1.dsk" $name=>Part1
+mount $path=>"/home/sebbbasdl/Documentos/Disco1.dsk" $name=>Part2
+mount $path=>"/home/sebbbasdl/Documentos/Disco1.dsk" $name=>Part3
+mount $path=>"/home/sebbbasdl/Documentos/Disco1.dsk" $name=>Part4
+mount $path=>"/home/sebbbasdl/Documentos/Disco2.dsk" $name=>Part1
+mount
+rep $name=>mbr $id=>vda1 $path=>"/home/sebbbasdl/Documentos/reporte3.jpg" 
+

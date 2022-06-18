@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstring>
 #include <algorithm>
+
 #include "funciones.cpp"
 
 
@@ -22,27 +23,54 @@ string minuscula(string cadena) {
 
 
 
-void command(char *command){
+
+void commando(char *command){
   
   string path;
   
   char *token = std::strtok(command, " ");
-  //std::cout << token << ' '<<endl;
-  //token = std::strtok(NULL, " ");
-  //std::cout << token << ' '<<endl;
+  
   
 
-  //char *dato = strtok(command," ");
-  //cout<<minuscula(token)<<endl;
+  
   if(strcasecmp(token,"exec")==0){
+    string line;
+    string text;
     token = std::strtok(NULL, "\"");
     std::cout << token << ' '<<endl;
+    
+
+    
 
     token = std::strtok(NULL, "\"");
     std::cout << token << ' '<<endl;
 
     path=token;
-    cout<<"Se manda a analizar el archivo: "+path<<endl;
+  
+    
+    
+    //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.script"
+    //exec $path="/home/sebbbasdl/Descargas/CalificacionFase1p2.sh"
+    
+  
+    ifstream archivo(path);
+    while(getline(archivo,line)){
+      text=text+line;
+      if(text==""){
+        cout<<"entre"<<endl;
+      }else{
+        strcpy(command,text.c_str());
+        //strcpy(comando,text.c_str());
+        commando(command);
+        cout<<text<<endl;
+        //command(comando[100]);
+        text="";
+      }
+      
+    }
+    
+    
+    
 
   
     
@@ -50,7 +78,7 @@ void command(char *command){
     
   }else if (strcasecmp(token,"mkdisk")==0){
     string a_mkdisk[3];
-    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
+    //Mkdisk $size=>4 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
     int cont=0;
     
     token = std::strtok(NULL, ">");
@@ -95,7 +123,7 @@ void command(char *command){
         
     }
 
-    if(cont==3){
+    if(cont==3 && stoi(a_mkdisk[0])%8==0){
      crearDisco(a_mkdisk);
     }else{
       cout<<"No se pudo crear disco"<<endl;
@@ -119,8 +147,8 @@ void command(char *command){
     //fdisk $sizE=>1 @type=>L @unit=>xd @fit=>bf $path=>”/mis discos/Disco3.dsk” $name=>Particion3
     //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/” $name=>Disco1.dsk
     //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part4 @Unit=>K @fit=>wf $sizE=>200
-    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part2 @Unit=>K @fit=>bf $sizE=>200
-    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part2 @Unit=>K @fit=>bf $sizE=>300
+    //fdisk @tYpE=>p $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3 @Unit=>K @fit=>ff $sizE=>400
 
     
     //fdisk @add=>2 $path=>”/home/sebbbasdl/Documentos/Disco1.dsk” $name=>Part3
@@ -301,9 +329,9 @@ void command(char *command){
     string a_mount[2];
     bool fmount=true;
     ////Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
-    //Mkdisk $size=>32 $path=>”/home/mi user/” $name=>Disco1.dsk
-    //mount $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part3
-    //fdisk @tYpE=>p $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part3 @Unit=>K @fit=>ff $sizE=>200
+    //Mkdisk $size=>32 $path=>”/home/mi user/” $name=>Disco1.dsk"
+    //mount $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part1"
+    //fdisk @tYpE=>p $path=>"/home/sebbbasdl/Documentos/prueba/Disco1.dsk" $name=>Part3 @Unit=>K @fit=>ff $sizE=>200"
 
     int cont=0;
     bool fpath=false;
@@ -407,6 +435,89 @@ void command(char *command){
     
   
   
+  }else if(strcasecmp(token,"pause")==0){
+    int i;
+
+    std::cin >> i;
+
+    if (i == 0)
+        return ; // Se recibió un cero.
+    else if (i < 0)
+        return ; // Se recibió un uno.
+    else {
+        // Código para el funcionamiento normal del programa.
+        return ; // El programa terminó satisfactoriamente.
+    }
+    
+    
+    
+      
+
+  }else if(strcasecmp(token,"/*")==0){
+    token = std::strtok(NULL, "*");
+    cout<<token<<endl;
+
+
+  
+  
+  }else if(strcasecmp(token,"rep")==0){
+    
+    string a_rep[3];
+    //rep $name=>mbr $id=>vda1 $path=>"/home/sebbbasdl/Documentos/reporte 2.jpg"
+  //rep $name=>part1 $id=>vda1 $path=>"/home/sebbbasdl/Documentos/prueba/reporte 2.jpg" 
+
+  //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.script"
+    /*rep
+    0   name
+    1   path
+    2   id
+    */
+    int cont=0;
+    
+    token = std::strtok(NULL, ">");
+    while (token){
+        
+        std::cout << token<< ' '<<endl;
+        
+        
+
+        if(strcasecmp(token,"$name=")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_rep[0]=token;
+          token = std::strtok(NULL, ">");
+          cont+=1;
+
+        }else if (strcasecmp(token,"$path=")==0){
+          
+          token = std::strtok(NULL, "$");
+          
+          std::cout << token << ' '<<endl;
+          a_rep[1]=token;
+          token = std::strtok(NULL, ">");
+          cont+=1;
+
+        }else if (strcasecmp(token,"id=")==0 ||strcasecmp(token,"$id=")==0 ){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_rep[2]=token;
+          token = std::strtok(NULL, ">");
+          cont+=1;
+
+        }else{
+          token=NULL;
+          cout<<"Falta algun parametro en rep"<<endl;
+          
+        }
+
+
+        
+    }
+
+    reportes(a_rep);    
+
+    
+    
   }else{
     cout<<"¡Error, este comando no existe!"<<endl;
   }
@@ -417,10 +528,16 @@ void command(char *command){
 
 
 void terminal(){
+  if(4%8==0){
+    cout<<"----"<<endl;
+  }
   char comando[100];
   cout<<"Ingrese el comando: "<< endl;
   scanf(" %[^\n]s", comando);
-  command(comando);
+  
+
+  
+  commando(comando);
   terminal();
 }
 
@@ -428,6 +545,7 @@ void terminal(){
 int main(){
   /*int arreglo[4] = {100,5,6,21};
   ordenar(4,arreglo);*/
+  
   terminal();
 
   
