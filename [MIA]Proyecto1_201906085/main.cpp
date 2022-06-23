@@ -51,6 +51,8 @@ void commando(char *command){
     
     //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.script"
     //exec $path="/home/sebbbasdl/Descargas/CalificacionFase1p2.sh"
+
+    //exec $path="/home/sebbbasdl/archivoprueba.sh"
     
   
     ifstream archivo(path);
@@ -78,7 +80,7 @@ void commando(char *command){
     
   }else if (strcasecmp(token,"mkdisk")==0){
     string a_mkdisk[3];
-    //Mkdisk $size=>4 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
+    //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
     int cont=0;
     
     token = std::strtok(NULL, ">");
@@ -466,7 +468,8 @@ void commando(char *command){
     //rep $name=>mbr $id=>vda1 $path=>"/home/sebbbasdl/Documentos/reporte 2.jpg"
   //rep $name=>part1 $id=>vda1 $path=>"/home/sebbbasdl/Documentos/prueba/reporte 2.jpg" 
 
-  //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.script"
+  //exec $path=>"/home/sebbbasdl/Descargas/CalificacionFase1p1.sh"
+  //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.sh"
     /*rep
     0   name
     1   path

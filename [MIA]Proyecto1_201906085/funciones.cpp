@@ -18,11 +18,75 @@ string arregloMountId[20];
 string arregloMountPath[20];
 string arregloMountPart[20];
 int contadorMount=0;
+string arregloletra[20];
 string arregloDiscos[20];
-int contadorDiscos1=-1;
+int contadorDiscos1=0;
+int contadorMount2=0;
 
 
+string abecedario(int conta){
+    string letra;
+    if(conta==0){
+        letra="a";
 
+    }else if(conta==1){
+        letra="b";
+
+    }else if(conta==2){
+        letra="c";
+
+    }else if(conta==3){
+        letra="d";
+
+    }else if(conta==4){
+        letra="e";
+
+    }else if(conta==5){
+        letra="f";
+
+    }else if(conta==6){
+        letra="g";
+
+    }else if(conta==7){
+        letra="h";
+
+    }else if(conta==8){
+        letra="i";
+
+    }else if(conta==9){
+        letra="j";
+
+    }else if(conta==10){
+        letra="k";
+
+    }else if(conta==11){
+        letra="l";
+
+    }else if(conta==12){
+        letra="m";
+
+    }else if(conta==13){
+        letra="n";
+
+    }else if(conta==14){
+        letra="ñ";
+
+    }else if(conta==15){
+        letra="o";
+
+    }else if(conta==16){
+        letra="p";
+
+    }else if(conta==17){
+        letra="q";
+
+    }else if(conta==18){
+        letra="r";
+
+    }
+
+    return letra;
+}
 int ordenar(int TAMANYO, int datos[]){
   
       sort(datos, datos + TAMANYO);
@@ -90,7 +154,7 @@ bool existeDirectorio(string rut){
 
 bool existeArchivo(string ruta){
     FILE *archivo;
-    if(archivo==fopen(ruta.c_str(),"r")){
+    if(archivo=fopen(ruta.c_str(),"r")){
 
         fclose(archivo);
         return true;
@@ -190,6 +254,7 @@ void reportes(string a_rep[]){
 
         }
     }
+    cout<<"aqui 10"<<endl;
     
     FILE *file;
     file= fopen(arregloMountPath[lugar].c_str(),"rb+");
@@ -197,6 +262,7 @@ void reportes(string a_rep[]){
     fseek(file,0,SEEK_SET);
     MBR mbr;
     fread(&mbr,sizeof(MBR),1,file);
+    cout<<"aqui 10"<<endl;
     
     
     string tamano(STRING(mbr.mbr_tamano));
@@ -214,6 +280,7 @@ void reportes(string a_rep[]){
     string size3(STRING(mbr.mbr_partition_3.part_size));
     string size4(STRING(mbr.mbr_partition_4.part_size));
     string dot;
+    
     if(flag==true && a_rep[0]=="mbr"){
         
         ofstream archivodot(rutacreada+a_rep[2]+".dot");
@@ -463,49 +530,252 @@ void mount( string a_mount2[]){
         MBR mbr;
         fread(&mbr,sizeof(MBR),1,file);    
         //cout<<mbr.mbr_partition_1.part_name<<endl;
-        if(mbr.mbr_partition_1.part_name==aux[0]){
-            //cout<<"entre"<<endl;
-            mbr.mbr_partition_1.part_status='1';
-            //cout<<"-------------------"<<contadorDiscos1<<endl;
-            //arregloMountId[contadorMount]="vda1";
-            arregloMountPart[contadorMount]=aux[0];
-            arregloMountPath[contadorMount]=path;
-            contadorMount+=1;
-            rewind(file);
-            fwrite(&mbr,sizeof(MBR),1,file);
-        }else if( mbr.mbr_partition_2.part_name==aux[0]){
-            mbr.mbr_partition_1.part_status=='1';
-            //arregloMountId[contadorMount]="vd"+retornaLetra(contadorDiscos1)+contadorMount+1;
-            arregloMountPart[contadorMount]=aux[0];
-            arregloMountPath[contadorMount]=path;
-            contadorMount+=1;
-            rewind(file);
-            fwrite(&mbr,sizeof(MBR),1,file);
+        if(contadorDiscos1==0){
+            if(mbr.mbr_partition_1.part_name==aux[0]){
             
-        }else if( mbr.mbr_partition_3.part_name==aux[0]){
-            //arregloMountId[contadorMount]="vd"+retornaLetra(contadorDiscos1)+contadorMount+1;
-            arregloMountPart[contadorMount]=aux[0];
-            arregloMountPath[contadorMount]=path;
-            contadorMount+=1;
-            mbr.mbr_partition_1.part_status=='1';
-            rewind(file);
-            fwrite(&mbr,sizeof(MBR),1,file);
-            
-        }else if( mbr.mbr_partition_4.part_name==aux[0]){
-            //arregloMountId[contadorMount]="vd"+retornaLetra(contadorDiscos1)+contadorMount+1;
-            arregloMountPart[contadorMount]=aux[0];
-            arregloMountPath[contadorMount]=path;
-            contadorMount+=1;
-            rewind(file);
-            fwrite(&mbr,sizeof(MBR),1,file);
-            
-        }else{
-            cout<<"Esta particion no existe en el disco con la ruta: "<<aux[1]<<endl;
-        }
+                
+                //cout<<"entre"<<endl;
+                mbr.mbr_partition_1.part_status='1';
+                //cout<<"-------------------"<<contadorDiscos1<<endl;
+                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountPart[contadorMount]=aux[0];
+                arregloMountPath[contadorMount]=path;
+                
+                contadorMount+=1;
+                arregloletra[contadorDiscos1]="a";
+                contadorDiscos1+=1;
+                rewind(file);
+                fwrite(&mbr,sizeof(MBR),1,file);
+            }else if( mbr.mbr_partition_2.part_name==aux[0]){
+                mbr.mbr_partition_1.part_status=='1';
+                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountPart[contadorMount]=aux[0];
+                arregloMountPath[contadorMount]=path;
+                contadorMount+=1;
+                arregloletra[contadorDiscos1]="a";
+                contadorDiscos1+=1;
+                rewind(file);
+                fwrite(&mbr,sizeof(MBR),1,file);
+                
+            }else if( mbr.mbr_partition_3.part_name==aux[0]){
+                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountPart[contadorMount]=aux[0];
+                arregloMountPath[contadorMount]=path;
+                contadorMount+=1;
+                mbr.mbr_partition_1.part_status=='1';
+                arregloletra[contadorDiscos1]="a";
+                contadorDiscos1+=1;
+                rewind(file);
+                fwrite(&mbr,sizeof(MBR),1,file);
+                
+            }else if( mbr.mbr_partition_4.part_name==aux[0]){
+                arregloMountId[contadorMount]="vda"+std::to_string(contadorDiscos1+1);
+                arregloMountPart[contadorMount]=aux[0];
+                arregloMountPath[contadorMount]=path;
+                contadorMount+=1;
+                arregloletra[contadorDiscos1]="a";
+                contadorDiscos1+=1;
+                rewind(file);
+                fwrite(&mbr,sizeof(MBR),1,file);
+                
+            }else{
+                cout<<"Esta particion no existe en el disco con la ruta: "<<aux[1]<<endl;
+            }
         cout<<"------STATUS----"<<endl;
         
-        fclose(file);
+        
 
+        }else{
+            fseek(file,0,SEEK_SET);
+            MBR mbr;
+            fread(&mbr,sizeof(MBR),1,file); 
+            cout<<"mori1"<<endl;
+            int contt=1;
+            int auxlugar=0;
+            for (int i = 0; i < arregloMountPath->length(); i++){
+                if(path==arregloMountPath[i]){
+                    contt+=1;  
+                    cout<<"cont: "<<contt<<endl; 
+                    auxlugar=i;
+                    cout<<"lugar: "<<auxlugar<<endl; 
+                }
+            }
+
+            for (int i = 0; i <= arregloletra->length(); i++){
+                cout<<arregloletra[i]<<endl;
+            }
+            
+            
+            for (int i = 0; i < arregloMountPath->length(); i++){
+                if(path==arregloMountPath[i] || contt>1) {
+                    cout<<"mori2"<<endl;
+                    if(mbr.mbr_partition_1.part_name==aux[0]){
+                        cout<<"mori3"<<endl;
+                        mbr.mbr_partition_1.part_status='1';
+                        
+                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountPart[contadorMount]=aux[0];
+                        arregloMountPath[contadorMount]=path;
+                        arregloletra[contadorMount]=arregloletra[auxlugar];
+                        
+                        contadorMount+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                    break;
+                        
+                    }else if(mbr.mbr_partition_2.part_name==aux[0]){
+                        cout<<"mori3"<<endl;
+                        mbr.mbr_partition_2.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        cout<<"ESTO ESSS I : "<<i<<endl;
+                        cout<<std::string(arregloletra[i])<<endl;
+                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountPart[contadorMount]=aux[0];
+                        arregloMountPath[contadorMount]=path;
+                        arregloletra[contadorMount]=arregloletra[auxlugar];
+                        
+                        contadorMount+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                    break;
+                        
+                    }else if(mbr.mbr_partition_3.part_name==aux[0]){
+                        cout<<"mori3"<<endl;
+                        mbr.mbr_partition_3.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountPart[contadorMount]=aux[0];
+                        arregloMountPath[contadorMount]=path;
+                        arregloletra[contadorMount]=arregloletra[auxlugar];
+                        
+                        contadorMount+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                    break;
+                        
+                    }else if(mbr.mbr_partition_4.part_name==aux[0]){
+                        cout<<"mori3"<<endl;
+                        mbr.mbr_partition_4.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountPart[contadorMount]=aux[0];
+                        arregloMountPath[contadorMount]=path;
+                        arregloletra[contadorMount]=arregloletra[auxlugar];
+                        
+                        contadorMount+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                    break;
+                        
+                    }
+
+                }else{
+                    
+                    if(mbr.mbr_partition_1.part_name==aux[0]){
+                        cout<<"CONTADOR DISCOSSSS : "<<contadorDiscos1<<endl;
+                        
+                        
+                        mbr.mbr_partition_1.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        cout<<abecedario(2)<<endl;
+                        
+                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        
+                        arregloMountPart[contadorMount]=aux[0];
+                        
+                        arregloMountPath[contadorMount]=path;
+                        
+                        
+                        arregloletra[contadorMount]=abecedario(contadorDiscos1);
+                        contadorMount+=1;
+                        contadorDiscos1+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+                        contadorDiscos1+=1;
+                        break;
+                    }else if(mbr.mbr_partition_2.part_name==aux[0]){
+                        cout<<"CONTADOR DISCOSSSS : "<<contadorDiscos1<<endl;
+                        
+                        
+                        mbr.mbr_partition_2.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        cout<<abecedario(2)<<endl;
+                        
+                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        
+                        arregloMountPart[contadorMount]=aux[0];
+                        
+                        arregloMountPath[contadorMount]=path;
+                        
+                        
+                        
+                        arregloletra[contadorMount]=abecedario(contadorDiscos1);
+                        contadorMount+=1;
+                        contadorDiscos1+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+                        contadorDiscos1+=1;
+                        break;
+                    }else if(mbr.mbr_partition_3.part_name==aux[0]){
+                        cout<<"CONTADOR DISCOSSSS : "<<contadorDiscos1<<endl;
+                        
+                        
+                        mbr.mbr_partition_3.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        cout<<abecedario(2)<<endl;
+                        
+                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        
+                        arregloMountPart[contadorMount]=aux[0];
+                        
+                        arregloMountPath[contadorMount]=path;
+                        
+                       
+                        
+                        arregloletra[contadorMount]=abecedario(contadorDiscos1);
+                        contadorMount+=1;
+                        contadorDiscos1+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+                        contadorDiscos1+=1;
+                        break;
+                    }else if(mbr.mbr_partition_4.part_name==aux[0]){
+                        cout<<"CONTADOR DISCOSSSS : "<<contadorDiscos1<<endl;
+                        
+                        
+                        mbr.mbr_partition_4.part_status='1';
+                        //cout<<"-------------------"<<contadorDiscos1<<endl;
+                        cout<<abecedario(2)<<endl;
+                        
+                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        
+                        arregloMountPart[contadorMount]=aux[0];
+                        
+                        arregloMountPath[contadorMount]=path;
+                        
+                        
+                        
+                        arregloletra[contadorMount]=abecedario(contadorDiscos1);
+                        contadorMount+=1;
+                        contadorDiscos1+=1;
+                        rewind(file);
+                        fwrite(&mbr,sizeof(MBR),1,file);
+                        
+                        contadorDiscos1+=1;
+                        break;
+                    }
+                    
+                }
+            }
+            
+
+            
+        }
+        
+        fclose(file);
     }
 
     file = fopen(path.c_str(),"rb+");
@@ -528,8 +798,8 @@ void mount( string a_mount2[]){
 }
 void onlymount(){
     cout<<contadorMount<<endl;
-    for (int i = 0; i <= contadorMount; i++){
-       cout<< arregloMountId[i]<<" "<<arregloMountPath[i]<<" "<<arregloMountPart[i]<<endl;
+    for (int i = 0; i < contadorMount; i++){
+       cout<< i << " "<<arregloMountId[i]<<" "<<arregloMountPath[i]<<" "<<arregloMountPart[i]<<endl;
         
     }
     
@@ -682,6 +952,8 @@ void crearDisco(string a_mkdisk2[]){
         fseek(file,0,SEEK_SET);
         fwrite(&mbr,sizeof(MBR),1,file);
         fclose(file);
+        //arregloDiscos[contadorDiscos1]=contadorDiscos1;
+        //contadorDiscos1+=1;
     }else{
         cout<<"creacion del disco incorrecta"<<endl;
     }
@@ -695,34 +967,8 @@ void crearDisco(string a_mkdisk2[]){
     std::cout<<ctime( &mbr2.mbr_fecha_creacion)<<endl;
 
     fclose(file);
-    contadorDiscos1+=1;
-    if(contadorDiscos1==1){
-        arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1) ;    
-    }else if(contadorDiscos1==2){
-        arregloMountId[contadorMount]="vdb"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==3){
-        arregloMountId[contadorMount]="vdc"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==4){
-        arregloMountId[contadorMount]="vdd"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==5){
-        arregloMountId[contadorMount]="vde"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==6){
-        arregloMountId[contadorMount]="vdf"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==7){
-        arregloMountId[contadorMount]="vdg"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==8){
-        arregloMountId[contadorMount]="vdh"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==9){
-        arregloMountId[contadorMount]="vdi"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==10){
-        arregloMountId[contadorMount]="vdj"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==11){
-        arregloMountId[contadorMount]="vdk"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==12){
-        arregloMountId[contadorMount]="vdl"+std::to_string(contadorMount+1);    
-    }else if(contadorDiscos1==13){
-        arregloMountId[contadorMount]="vdm"+std::to_string(contadorMount+1);    
-    }
+    
+    
     
     
     
