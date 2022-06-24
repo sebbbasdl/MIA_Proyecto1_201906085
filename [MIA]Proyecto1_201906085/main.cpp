@@ -521,9 +521,303 @@ void commando(char *command){
 
     
     
+  }else if (strcasecmp(token,"mkfs")==0){
+    //MkfS $id=>vda1 @type=>fast
+    /*
+    0 id
+    1 type
+    2  add
+    3 unit
+    */
+    int cont=0;
+    bool fid=false;
+    string a_mkfs[8];
+    token = std::strtok(NULL, ">");
+    a_mkfs[3]="k";
+    a_mkfs[1]="full";
+    
+    
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"$id=")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_mkfs[0]=token;
+          token = std::strtok(NULL, ">");
+          fid=true;
+          cont+=1;
+
+        }else if (strcasecmp(token,"@unit=")==0){
+          token = std::strtok(NULL, " ");
+          
+          std::cout << token << ' '<<endl;
+          if(strcasecmp(token,"b")==0 || strcasecmp(token,"k")==0|| strcasecmp(token,"m")==0){
+            
+            a_mkfs[3]=token;
+            token = std::strtok(NULL, ">");
+            cont+=1;
+          }else{
+            break;
+          }
+
+          
+        
+        }else if (strcasecmp(token,"@type=")==0){
+
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+
+          if(strcasecmp(token,"fast")==0 || strcasecmp(token,"full")==0){
+            a_mkfs[1]=token;
+            token = std::strtok(NULL, ">");
+            cont+=1;
+          }else{
+            break;
+          }
+          
+
+        }else if (strcasecmp(token,"@add=")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_mkfs[2]=token;
+          token = std::strtok(NULL, ">");
+          cont+=1;
+          
+
+        }else{
+          token=NULL;
+          
+        }
+
+      
+    }
+    cout<<"----Arreglo MKFS----"<<endl;
+    for (int i = 0; i < cont; i++){
+      cout<<a_mkfs[i]<<endl;
+    }
+
+    
+  }else if(strcasecmp(token,"mkfile")==0){
+    //mkfile $id=>vda1 $path=>"/home/user/docs/b.txt" $size=>100 @cont=>"/home/Documents/b.txt" @p
+    //mkfile $path=>"/home/user/docs/b.txt" $id=>vda1
+    /*
+    0 id
+    1 path
+    2 p
+    3 size
+    4 cont
+    */
+    int cont=0;
+    bool fp=false;
+    bool fsize=false;
+    bool fcont=false;
+    bool fpath=false;
+    bool fid=false;
+    
+    string a_mkfile[8];
+    token = std::strtok(NULL, ">");
+    a_mkfile[3]="0";
+    bool fdelete=false;
+    bool fadd=false;
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"$size=")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_mkfile[3]=token;
+          token = std::strtok(NULL, ">");
+          fsize=true;
+          
+          cont+=1;
+
+        }else if (strcasecmp(token,"$path=")==0){
+          token = std::strtok(NULL, ".");
+          std::cout << token << ' '<<endl;
+          //token = std::strtok(NULL, " ");
+          //std::cout << token << ' '<<endl;
+
+          a_mkfile[1]=token ;
+
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          
+          token = std::strtok(NULL, ">");
+          std::cout << token << ' '<<endl;
+          
+          fpath=true;
+          
+          cont+=1;
+        
+          
+          //cout << aux[3] << "----------"<<endl;
+          
+
+        }else if (strcasecmp(token,"$id=")==0){
+          token = std::strtok(NULL, " ");
+          
+          std::cout << token << ' '<<endl;
+            
+            a_mkfile[0]=token;
+            token = std::strtok(NULL, ">");
+            cont+=1;
+          fid=true;
+
+          
+        
+        }else if (token[0]=='@' && token[1]=='p'){
+          cout<<"soy p"<<endl;
+          a_mkfile[2]=token;
+          
+          fp=true;
+          break;
+          
+          
+
+        }else if (strcasecmp(token,"@cont=")==0){
+          
+          token = std::strtok(NULL, ".");
+          std::cout << token << ' '<<endl;
+          //token = std::strtok(NULL, " ");
+          //std::cout << token << ' '<<endl;
+
+          a_mkfile[4]=token ;
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          token = std::strtok(NULL, ">");
+          std::cout << token << ' '<<endl;
+          fcont=true;
+          
+          cont+=1;
+          
+        
+        }
+
+        else{
+          token=NULL;
+          
+        }
+    }
+
+    cout<<"----Arreglo MKFILE----"<<cont<<endl;
+    for (int i = 0; i < 5; i++){
+      cout<<a_mkfile[i]<<endl;
+    }
+
+    if(fsize==false && fcont==true && fpath==true && fid==true){
+      cout<<"copiar archivo en otro directorio"<<endl;
+    }else if(fpath==true && fid==true && fsize==true && fp==true){
+      cout<<"crear archivo y crear rutas"<<endl;
+
+    }else if(fpath==true && fid==true && fsize==true && fp==false){
+      cout<<"crear archivo en ruta"<<endl;
+    }else{
+      cout<<"Algun parametro esta malo en mkfile"<<endl;
+    }
+
+  }else if(strcasecmp(token,"mkdir")==0){
+    //Mkdir $id=>vda1 $path=>"/home/user/docs/usac" @p
+    int cont=0;
+    bool fp=false;
+    
+    bool fpath=false;
+    bool fid=false;
+    
+    string a_mkdir[8];
+    token = std::strtok(NULL, ">");
+    
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"$id=")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          a_mkdir[0]=token;
+          token = std::strtok(NULL, ">");
+          fid=true;
+          
+          cont+=1;
+
+        }else if (strcasecmp(token,"$path=")==0){
+          token = std::strtok(NULL, "@");
+          
+          std::cout << token << ' '<<endl;
+          a_mkdir[1]=token;
+          token = std::strtok(NULL, ">");
+          cont+=1;
+
+
+          
+          fpath=true;
+          
+          
+        
+          
+          //cout << aux[3] << "----------"<<endl;
+          
+
+        }else if ((token[0]=='@' || token[0]==' ') || token[0]=='p'){
+          cout<<"soy p"<<endl;
+          a_mkdir[2]=token;
+          
+          fp=true;
+          break;
+          
+          
+
+        }
+        
+
+        else{
+          token=NULL;
+          
+        }
+    }
+
+    cout<<"----Arreglo MKFDIR----"<<cont<<endl;
+    for (int i = 0; i < 5; i++){
+      cout<<a_mkdir[i]<<endl;
+    }
+
+    if(fp==true && fid==true && fpath==true){
+      cout<<"se crear rutas"<<endl;
+    }else if(fp==false && fid==true && fpath==true){
+      cout<<"la carpeta padre ya debe existir"<<endl;
+    }
   }else{
     cout<<"¡Error, este comando no existe!"<<endl;
   }
+
+  
+  
 
 }
 
