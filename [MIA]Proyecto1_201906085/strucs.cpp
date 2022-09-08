@@ -1,4 +1,32 @@
 #include <time.h>
+#include <string.h>
+
+using namespace std;
+
+
+
+typedef struct tablaInodos{
+    string id;
+    int i_uid;
+    int i_gid;
+    int i_size;
+    time_t i_atime;
+    time_t i_ctime;
+    time_t i_mtime;
+    typedef struct bloque{
+        char b_name[12];
+        tablaInodos *tinodo;
+    };
+    bloque i_block[12];
+    char i_type;
+
+};
+
+
+
+
+
+
 
 typedef struct partition1{
     char part_status;
@@ -18,4 +46,8 @@ typedef struct MBR{
     partition1 mbr_partition_3;
     partition1 mbr_partition_4;
 };
+
+
+
+
 

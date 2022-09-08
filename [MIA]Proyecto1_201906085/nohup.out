@@ -46,3 +46,11 @@ display-im6.q16: unable to open image `/home/sebbbasdl/archivos/fase1/reporteDIS
 display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.
 display-im6.q16: unable to open image `/home/sebbbasdl/archivos/fase1/reporteDISKDISCO1.jpg': No such file or directory @ error/blob.c/OpenBlob/2874.
 display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.
+display-im6.q16: unable to open image `/home/sebbbasdl/Documentos/reporte2.jpg': No such file or directory @ error/blob.c/OpenBlob/2874.
+display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.
+display-im6.q16: unable to open image `/home/sebbbasdl/Documentos/reporte2.jpg': No such file or directory @ error/blob.c/OpenBlob/2874.
+display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.
+display-im6.q16: unable to open image `/home/sebbbasdl/Documentos/reporte2.jpg': No such file or directory @ error/blob.c/OpenBlob/2874.
+display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.
+display-im6.q16: unable to open image `/home/sebbbasdl/Documentos/prueba/reporte2.jpg': No such file or directory @ error/blob.c/OpenBlob/2874.
+display-im6.q16: no decode delegate for this image format `' @ error/constitute.c/ReadImage/560.

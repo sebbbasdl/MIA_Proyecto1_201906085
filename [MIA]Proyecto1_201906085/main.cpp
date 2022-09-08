@@ -94,23 +94,23 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"$size=")==0){
+        if(strcasecmp(token,"-size-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkdisk[0]=token;
           token = std::strtok(NULL, ">");
           cont+=1;
 
-        }else if (strcasecmp(token,"$path=")==0){
+        }else if (strcasecmp(token,"-path-")==0){
           
-          token = std::strtok(NULL, "$");
+          token = std::strtok(NULL, "-");
           
           std::cout << token << ' '<<endl;
           a_mkdisk[1]=token;
           token = std::strtok(NULL, ">");
           cont+=1;
 
-        }else if (strcasecmp(token,"name=")==0 ||strcasecmp(token,"$name=")==0 ){
+        }else if (strcasecmp(token,"name-")==0 ||strcasecmp(token,"-name-")==0 ){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkdisk[2]=token;
@@ -190,7 +190,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"$size=")==0){
+        if(strcasecmp(token,"-size-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_fdisk[0]=token;
@@ -198,7 +198,7 @@ void commando(char *command){
           fsize=true;
           cont+=1;
 
-        }else if (strcasecmp(token,"$path=")==0){
+        }else if (strcasecmp(token,"-path-")==0){
           token = std::strtok(NULL, ".");
           std::cout << token << ' '<<endl;
           //token = std::strtok(NULL, " ");
@@ -216,7 +216,7 @@ void commando(char *command){
           //cout << aux[3] << "----------"<<endl;
           
 
-        }else if (strcasecmp(token,"$name=")==0){
+        }else if (strcasecmp(token,"-name-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_fdisk[2]=token;
@@ -225,7 +225,7 @@ void commando(char *command){
           fname=true;
 
         
-        }else if (strcasecmp(token,"@unit=")==0){
+        }else if (strcasecmp(token,"-unit-")==0){
           token = std::strtok(NULL, " ");
           
           std::cout << token << ' '<<endl;
@@ -240,7 +240,7 @@ void commando(char *command){
 
           
         
-        }else if (strcasecmp(token,"@type=")==0){
+        }else if (strcasecmp(token,"-type-")==0){
 
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
@@ -254,7 +254,7 @@ void commando(char *command){
           }
           
 
-        }else if (strcasecmp(token,"@fit=")==0){
+        }else if (strcasecmp(token,"-fit-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
 
@@ -267,7 +267,7 @@ void commando(char *command){
           }
           
         
-        }else if (strcasecmp(token,"@delete=")==0){
+        }else if (strcasecmp(token,"-delete-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           if(strcasecmp(token,"full")==0 || strcasecmp(token,"fast")==0){
@@ -280,7 +280,7 @@ void commando(char *command){
           }
           
 
-        }else if (strcasecmp(token,"@add=")==0){
+        }else if (strcasecmp(token,"-add-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_fdisk[7]=token;
@@ -288,7 +288,7 @@ void commando(char *command){
           cont+=1;
           fadd=true;
 
-        }else if (strcasecmp(token,"@mov=")==0){
+        }else if (strcasecmp(token,"-mov-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_fdisk[8]=token;
@@ -351,9 +351,9 @@ void commando(char *command){
         }*/
         cout<<fmount<<endl;
 
-        if (strcasecmp(token,"$path=")==0){
+        if (strcasecmp(token,"-path-")==0){
           
-          token = std::strtok(NULL, "$");
+          token = std::strtok(NULL, "-");
           
           std::cout << token << ' '<<endl;
           a_mount[0]=token;
@@ -362,7 +362,7 @@ void commando(char *command){
           fmount=false;
           fpath=true;
 
-        }else if (strcasecmp(token,"name=")==0 ||strcasecmp(token,"$name=")==0 ){
+        }else if (strcasecmp(token,"name-")==0 ||strcasecmp(token,"-name-")==0 ){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mount[1]=token;
@@ -417,7 +417,7 @@ void commando(char *command){
     
     while(token){
       aux=token[3];
-      aux2="$id"+aux +"=";
+      aux2="-id"+aux +"-";
       std::cout<<aux2<<endl;
       if(aux2==token){
         token = std::strtok(NULL, " ");
@@ -466,7 +466,7 @@ void commando(char *command){
     
     string a_rep[3];
     //rep $name=>mbr $id=>vda1 $path=>"/home/sebbbasdl/Documentos/reporte 2.jpg"
-  //rep $name=>part1 $id=>vda1 $path=>"/home/sebbbasdl/Documentos/prueba/reporte 2.jpg" 
+  //rep $name=>disk $id=>vda1 $path=>"/home/sebbbasdl/Documentos/prueba/reporte 2.jpg" 
 
   //exec $path=>"/home/sebbbasdl/Descargas/CalificacionFase1p1.sh"
   //exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.sh"
@@ -484,23 +484,23 @@ void commando(char *command){
         
         
 
-        if(strcasecmp(token,"$name=")==0){
+        if(strcasecmp(token,"-name-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_rep[0]=token;
           token = std::strtok(NULL, ">");
           cont+=1;
 
-        }else if (strcasecmp(token,"$path=")==0){
+        }else if (strcasecmp(token,"-path-")==0){
           
-          token = std::strtok(NULL, "$");
+          token = std::strtok(NULL, "-");
           
           std::cout << token << ' '<<endl;
           a_rep[1]=token;
           token = std::strtok(NULL, ">");
           cont+=1;
 
-        }else if (strcasecmp(token,"id=")==0 ||strcasecmp(token,"$id=")==0 ){
+        }else if (strcasecmp(token,"id-")==0 ||strcasecmp(token,"-id-")==0 ){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_rep[2]=token;
@@ -526,15 +526,15 @@ void commando(char *command){
     /*
     0 id
     1 type
-    2  add
-    3 unit
+    2 fs
     */
     int cont=0;
     bool fid=false;
     string a_mkfs[8];
     token = std::strtok(NULL, ">");
-    a_mkfs[3]="k";
+  
     a_mkfs[1]="full";
+    a_mkfs[1]="2fs";
     
     
 
@@ -549,7 +549,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"$id=")==0){
+        if(strcasecmp(token,"-id-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkfs[0]=token;
@@ -557,22 +557,7 @@ void commando(char *command){
           fid=true;
           cont+=1;
 
-        }else if (strcasecmp(token,"@unit=")==0){
-          token = std::strtok(NULL, " ");
-          
-          std::cout << token << ' '<<endl;
-          if(strcasecmp(token,"b")==0 || strcasecmp(token,"k")==0|| strcasecmp(token,"m")==0){
-            
-            a_mkfs[3]=token;
-            token = std::strtok(NULL, ">");
-            cont+=1;
-          }else{
-            break;
-          }
-
-          
-        
-        }else if (strcasecmp(token,"@type=")==0){
+        }else if (strcasecmp(token,"-type-")==0){
 
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
@@ -586,12 +571,18 @@ void commando(char *command){
           }
           
 
-        }else if (strcasecmp(token,"@add=")==0){
+        }else if (strcasecmp(token,"-fs-")==0){
+
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
-          a_mkfs[2]=token;
-          token = std::strtok(NULL, ">");
-          cont+=1;
+
+          if(strcasecmp(token,"2fs")==0 || strcasecmp(token,"3fs")==0){
+            a_mkfs[2]=token;
+            token = std::strtok(NULL, ">");
+            cont+=1;
+          }else{
+            break;
+          }
           
 
         }else{
@@ -604,6 +595,12 @@ void commando(char *command){
     cout<<"----Arreglo MKFS----"<<endl;
     for (int i = 0; i < cont; i++){
       cout<<a_mkfs[i]<<endl;
+    }
+
+    if(fid==true){
+      mkfs(a_mkfs);
+    }else{
+      cout<<"No se encontro el id para la funcion MKFS"<<endl;
     }
 
     
@@ -641,7 +638,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"$size=")==0){
+        if(strcasecmp(token,"-size-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkfile[3]=token;
@@ -650,7 +647,7 @@ void commando(char *command){
           
           cont+=1;
 
-        }else if (strcasecmp(token,"$path=")==0){
+        }else if (strcasecmp(token,"-path-")==0){
           token = std::strtok(NULL, ".");
           std::cout << token << ' '<<endl;
           //token = std::strtok(NULL, " ");
@@ -672,7 +669,7 @@ void commando(char *command){
           //cout << aux[3] << "----------"<<endl;
           
 
-        }else if (strcasecmp(token,"$id=")==0){
+        }else if (strcasecmp(token,"-id-")==0){
           token = std::strtok(NULL, " ");
           
           std::cout << token << ' '<<endl;
@@ -693,7 +690,7 @@ void commando(char *command){
           
           
 
-        }else if (strcasecmp(token,"@cont=")==0){
+        }else if (strcasecmp(token,"-cont-")==0){
           
           token = std::strtok(NULL, ".");
           std::cout << token << ' '<<endl;
@@ -757,7 +754,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"$id=")==0){
+        if(strcasecmp(token,"-id-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkdir[0]=token;
@@ -766,8 +763,8 @@ void commando(char *command){
           
           cont+=1;
 
-        }else if (strcasecmp(token,"$path=")==0){
-          token = std::strtok(NULL, "@");
+        }else if (strcasecmp(token,"-path-")==0){
+          token = std::strtok(NULL, "-");
           
           std::cout << token << ' '<<endl;
           a_mkdir[1]=token;
@@ -784,7 +781,7 @@ void commando(char *command){
           //cout << aux[3] << "----------"<<endl;
           
 
-        }else if ((token[0]=='@' || token[0]==' ') || token[0]=='p'){
+        }else if ((token[0]=='-' || token[0]==' ') || token[0]=='p'){
           cout<<"soy p"<<endl;
           a_mkdir[2]=token;
           
@@ -842,8 +839,18 @@ void terminal(){
 int main(){
   /*int arreglo[4] = {100,5,6,21};
   ordenar(4,arreglo);*/
+  //tablaInodos *inodos=new tablaInodos();
   
-  terminal();
+  /*cout<<"1-------------"<<endl;
+  insertar(inodos,"prueba",'0',"/root/");
+  cout<<"2-------------"<<endl;
+  insertar(inodos,"prueba",'0',"/root/home/");*/
+  /*cout<<"3--------------"<<endl;
+  insertar(inodos,"prueba",'0',"/root/casa/");*/
+  //crearArchivo_UyG("/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  login("root","123","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  
+  //terminal();
 
   
     /*string dato;

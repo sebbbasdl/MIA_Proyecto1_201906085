@@ -22,6 +22,9 @@ string arregloletra[20];
 string arregloDiscos[20];
 int contadorDiscos1=0;
 int contadorMount2=0;
+string infoEXT;
+bool activa=false;
+
 
 
 string abecedario(int conta){
@@ -1683,10 +1686,318 @@ void fdisk_add(string a_fdisk3[]){
     std::cout<<mbr2.mbr_partition_2.part_status<<endl;
     std::cout<<mbr2.mbr_partition_2.part_type<<endl;
     
+    fclose(file);
+
+}
+
+void mkfs(string a_mkfs[]){
+    string path;
+    string name;
+    bool flag_mkfs=false;
+    for (int i = 0; i < contadorMount; i++){
+        if(a_mkfs[0]==arregloMountId[i]){
+            path=arregloMountPath[i];
+            name=arregloMountPart[i];
+
+            flag_mkfs=true;
+            break;
+        }
+    }
+    
+    if(flag_mkfs==true){
+        
+        FILE *file;
+        
+        file= fopen(path.c_str(),"rb+");
+        
+        
+        fseek(file,0,SEEK_SET);
+        
+        MBR mbr;
+        
+        fread(&mbr,sizeof(MBR),1,file);
+
+        if(mbr.mbr_partition_1.part_name==name){
+            int pos=mbr.mbr_partition_1.part_start;
+            /*prueba pru;
+            
+            pru.id=a_mkfs[0];
+            fseek(file, pos, SEEK_SET);
+            
+            rewind(file);
+            
+            fwrite(&pru,sizeof(pru),1,file);*/
+
+        }else if(mbr.mbr_partition_2.part_name==name){
+            int pos=mbr.mbr_partition_2.part_start;
+            /*prueba pru;
+            
+            pru.id=a_mkfs[0];
+            fseek(file, pos, SEEK_SET);
+            
+            rewind(file);
+            
+            fwrite(&pru,sizeof(pru),1,file);*/
+
+        }else if(mbr.mbr_partition_3.part_name==name){
+            /*int pos=mbr.mbr_partition_3.part_start;
+            prueba pru;
+            
+            pru.id=a_mkfs[0];
+            fseek(file, pos, SEEK_SET);
+            
+            rewind(file);
+            
+            fwrite(&pru,sizeof(pru),1,file);*/
+        }else if(mbr.mbr_partition_4.part_name==name){
+            /*int pos=mbr.mbr_partition_4.part_start;
+            prueba pru;
+            
+            pru.id=a_mkfs[0];
+            fseek(file, pos, SEEK_SET);
+            
+            rewind(file);
+            
+            fwrite(&pru,sizeof(pru),1,file);*/
+            
+        } 
+        
+        
+        fclose(file);
+
+
+        
+
+        
+    }else{
+        cout<<"No se encontre el Id en la lista de particiones montadas."<<endl;
+    }
+       /* FILE *file;
+        
+        file= fopen(path.c_str(),"rb+");
+        
+        
+        fseek(file,0,SEEK_SET);
+        
+        MBR mbr;
+        
+        fread(&mbr,sizeof(MBR),1,file);
+        
+        prueba pru;
+        cout<<"---SOY PRUEBA ID:--- "<<endl;
+        cout<<pru.id[0]<<endl;
+        
+        fclose(file);*/
     
 
 }
 
+
+
+void insertar(tablaInodos *&inodo , string id, char tipo, string path){
     
+    int contadorinodos=0;
+    int contadorbloques=0;
+    tablaInodos *nuevo_inodo = new tablaInodos();
+    nuevo_inodo->id=id;
+    nuevo_inodo->i_type=tipo;
+    
+
+    string arreglopath[30];
+    string dato;
+    int contaa =0;
+    
+    
+    for (int i = 0; i < 12; i++){
+        *inodo->i_block[i].b_name='e';
+    }
+
+    //cout<<path.length()<<endl;
+    for (int i = 1; i < path.length(); i++){
+        
+        if(path[i] == '/' || path[i]==NULL ){
+            
+            arreglopath[contaa]=dato;
+            dato="";
+            contaa+=1;
+        }else{
+            dato+=path[i];
+        }
+    }
+
+    for (int i = 0; i < contaa; i++){
+        cout<<arreglopath[i]<<endl;
+    }
+    
+    //cout<<arreglopath[2]<<endl;
+    cout<<"---------------"<<endl;
+    tablaInodos *aux1 =inodo;
+    tablaInodos *aux2;
+    while (aux1!=NULL){
+        //cout<<arreglopath[contadorinodos]<<endl;
+        contadorinodos+=1;
+        cout<<"ci: "<<contadorinodos<<endl;
+        
+        
+        for (int i = 0; i < 12; i++){
+            cout<<*aux1->i_block[0].b_name<<endl;
+            cout<<"I: "<<i<<endl;
+            if(aux1->i_block[i].b_name==arreglopath[contadorinodos]){
+                //cout<<"I: "<<i<<endl;
+                contadorbloques=i;
+                cout<<"Encontro igual"<<endl;
+                contadorinodos=contadorinodos-1;
+                break;
+            }else if(*aux1->i_block[i].b_name=='e'){
+                  if(arreglopath[contadorinodos-1]=="root"){
+                    //cout<<"I: "<<i<<endl;
+                    cout<<"entre"<<endl;
+                    contadorinodos=0;
+                    contadorbloques=i;
+                    break;
+                  }else{
+                    //cout<<"I: "<<i<<endl;
+                    contadorbloques=i;
+                    contadorinodos=contadorinodos-1;
+                    cout<<"No encontro"<<endl;
+                    break;
+                  }
+                
+                    
+                
+                
+
+            }
+        }
+        
+        aux2=aux1;
+        aux1 =aux1->i_block[contadorbloques].tinodo;
+        
+        //contadorinodos+=1;    
+        
+        //cout<<"Contador inodos: "<<contadorinodos<<endl;
+
+    }
+    
+    nuevo_inodo->i_block[contadorbloques].b_name[12]= *arreglopath[contadorinodos].c_str();
+    //cout<<"CI: ";
+    //cout<<contadorinodos<<endl;
+    //cout<<"ARr: ";
+    //infoEXT+=arreglopath[contadorinodos];
+    
+    cout<<"arreglo: "<<arreglopath[contadorinodos]<<endl;
+    cout<<"contai: "<<contadorinodos<<endl;
+    cout<<"contab: "<<contadorbloques<<endl;
+    aux2->i_block[contadorbloques].tinodo=nuevo_inodo;
+    //cout<<"muere"<<endl;
+    nuevo_inodo->i_block[contadorbloques].tinodo=aux1;
+    //cout<<"muere2"<<endl;
+
+}
+
+void mostrarExt3(tablaInodos *inodos){
+    /*tablaInodos *actual= new tablaInodos();
+    tablaInodos *aux = new tablaInodos();
+    actual= inodos;
+    
+
+    while(actual!=NULL){
+        for (int i = 0; i < 12; i++){
+            aux=inodos;
+            if(actual->i_block[i].b_name==NULL){
+                break;
+            }else{
+                actual=actual->i_block[i].inodo;
+                
+
+                while (actual!=NULL){
+                    actual=actual->i_block[i].inodo;
+                }
+                
+                
+            }
+        }
+        
+
+    }*/
+}
             
     
+void crearArchivo_UyG(string path){
+    ofstream archivo;
+
+    archivo.open(path, ios::out);
+    if(archivo.fail()){
+        cout<<"No se pudo crear el archivo raiz usuarios y grupos"<<endl;
+    }
+
+    archivo<<"1,G,root"<<endl;
+    archivo<<"1,U,root,root,123"<<endl;
+    archivo.close();
+}
+
+void login(string user,string contra,string path){
+    //int contadorlog=0;
+    string datos[5];
+    int cont_datos;
+    string aux_dato;
+    if(activa==false){
+        
+        ifstream archivo;
+        string texto;
+        archivo.open(path, ios:: out);
+        if(archivo.fail()){
+        cout<<"No se pudo leer en el archivo raiz usuarios y grupos. Por lo tanto no se podra iniciar sesion."<<endl;
+        }
+
+        while (!archivo.eof()){
+            //contadorlog+=1;
+            getline(archivo,texto);
+            //cout<<contadorlog<<texto<<endl;
+            //cout<<texto.length()<<endl;
+            //cout<<texto[8]<<endl;
+            cont_datos=0;
+            
+            for (int i = 0; i < texto.length(); i++){
+                if(texto[i]==','){
+                    cout<<aux_dato<<endl;
+                    datos[cont_datos]=aux_dato;
+                    cont_datos+=1;
+                    aux_dato="";
+
+                    
+                }else{
+                    if(i==texto.length()-1){
+                        aux_dato+=texto[i];
+                        cout<<aux_dato<<endl;
+                        datos[cont_datos]=aux_dato;
+                        cont_datos+=1;
+                        aux_dato="";
+                    }else{
+                        aux_dato+=texto[i];
+                    }
+                    
+                }
+                
+            }
+            //cout<<cont_datos<<endl;
+
+            if(cont_datos==5){
+                if(datos[3]==user && datos[4]==contra){
+                    activa=true;
+                    cout<<"Inicio de sesion correcto, bienvenido: "<<user<<endl;
+                    break;
+                }else{
+                    cout<<"Usuario o contraseña son incorrectos"<<endl;
+                }
+            }
+            
+        }
+        archivo.close();
+
+
+    }else{
+        cout<<"No se puede iniciar sesion ya que hay un usuario activo!!!"<<endl;
+    }
+}
+
