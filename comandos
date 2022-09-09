@@ -1,0 +1,2 @@
+exec $path="/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/prueba.sh"
+login -usr->root -pass->1223 -id->vda1

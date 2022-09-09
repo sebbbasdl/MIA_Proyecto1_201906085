@@ -24,6 +24,8 @@ string minuscula(string cadena) {
 
 
 
+
+
 void commando(char *command){
   
   string path;
@@ -522,7 +524,7 @@ void commando(char *command){
     
     
   }else if (strcasecmp(token,"mkfs")==0){
-    //MkfS $id=>vda1 @type=>fast
+    //MkfS -id->vda1 -type->fast
     /*
     0 id
     1 type
@@ -534,7 +536,7 @@ void commando(char *command){
     token = std::strtok(NULL, ">");
   
     a_mkfs[1]="full";
-    a_mkfs[1]="2fs";
+    a_mkfs[2]="2fs";
     
     
 
@@ -593,7 +595,7 @@ void commando(char *command){
       
     }
     cout<<"----Arreglo MKFS----"<<endl;
-    for (int i = 0; i < cont; i++){
+    for (int i = 0; i < 3; i++){
       cout<<a_mkfs[i]<<endl;
     }
 
@@ -682,7 +684,7 @@ void commando(char *command){
           
         
         }else if (token[0]=='@' && token[1]=='p'){
-          cout<<"soy p"<<endl;
+          //cout<<"soy p"<<endl;
           a_mkfile[2]=token;
           
           fp=true;
@@ -809,6 +811,121 @@ void commando(char *command){
     }else if(fp==false && fid==true && fpath==true){
       cout<<"la carpeta padre ya debe existir"<<endl;
     }
+  }else if(strcasecmp(token,"mkgrp")==0){
+    string pathId;
+    //mkgrp -name->usuarios
+    /*
+    0 name
+    */
+    int cont=0;
+    bool fname=false;
+    string name;
+    token = std::strtok(NULL, ">");
+  
+    //a_mkfs[1]="full";
+    //a_mkfs[1]="2fs";
+    
+    
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"-name-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          name=token;
+          token = std::strtok(NULL, ">");
+          fname=true;
+          cont+=1;
+
+        }else{
+          token=NULL;
+          
+        }
+
+        if(fname==true){
+          cout<<arregloMountPath[0]<<endl;
+          mkgrp(name,pathId);
+        }
+
+      
+    }
+    
+  }else if(strcasecmp(token,"login")==0){
+    string pathId;
+    
+    int cont=0;
+    bool fname=false;
+    string name;
+    token = std::strtok(NULL, ">");
+    string log[3];
+    //a_mkfs[1]="full";
+    //a_mkfs[1]="2fs";
+    
+    
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"-usr-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          log[0]=token;
+          token = std::strtok(NULL, ">");
+          fname=true;
+          cont+=1;
+
+        }else if(strcasecmp(token,"-pass-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          log[1]=token;
+          token = std::strtok(NULL, ">");
+          
+          cont+=1;
+        }else if(strcasecmp(token,"-id-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          log[2]=token;
+          token = std::strtok(NULL, ">");
+          
+          cont+=1;
+        }else{
+          token=NULL;
+          
+        }
+
+        
+
+      
+    }
+
+    if(cont==3){
+      cout<<log[0]<<log[1]<<log[2]<<endl;
+      login(log[0],log[1],log[2]);
+      
+    }else{
+      cout<<"Hace falta algun parametro en Login para poder iniciar sesion."<<endl;
+    }
+    
+  }else if(strcasecmp(token,"logout")==0){
+    activa=false;
+    cout<<"Usted ha cerrado sesion"<<endl;
   }else{
     cout<<"¡Error, este comando no existe!"<<endl;
   }
@@ -848,9 +965,11 @@ int main(){
   /*cout<<"3--------------"<<endl;
   insertar(inodos,"prueba",'0',"/root/casa/");*/
   //crearArchivo_UyG("/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
-  login("root","123","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
-  
-  //terminal();
+  //login("root","123","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  //mkgrp("cr7","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  //mkusr("sebas2","321","cr7","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  //cout<<path_sindisco("/home/sebbbasdl/archivos/fase1/D1.dsk")<<endl;
+  terminal();
 
   
     /*string dato;

@@ -21,5 +21,7 @@ mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI2
 
 mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3
 
+MkfS -id->vda1 -type->fast
 
-mkfs -id->061Disco1 -type->full -fs->2fs
+login -usr->root -pass->123 -id->vda1
+

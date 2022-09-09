@@ -25,7 +25,22 @@ int contadorMount2=0;
 string infoEXT;
 bool activa=false;
 
+string usuario_actual;
+string path_actual;
 
+
+void crearArchivo_UyG(string path){
+    ofstream archivo;
+
+    archivo.open(path, ios::out);
+    if(archivo.fail()){
+        cout<<"No se pudo crear el archivo raiz usuarios y grupos"<<endl;
+    }
+
+    archivo<<"1,G,root"<<endl;
+    archivo<<"1,U,root,root,123";
+    archivo.close();
+}
 
 string abecedario(int conta){
     string letra;
@@ -1690,14 +1705,36 @@ void fdisk_add(string a_fdisk3[]){
 
 }
 
+string path_sindisco(string path){
+    int lugar=0;
+    string path2;
+    for (int i = 0; i < path.length(); i++){
+        if(path[i]=='/'){
+            lugar=i;
+        }
+        
+    }
+
+    for (int i = 0; i <= lugar; i++){
+        path2+=path[i];
+        
+    }
+
+    return path2;
+    
+}
+
 void mkfs(string a_mkfs[]){
     string path;
+    string path2;
     string name;
     bool flag_mkfs=false;
+    int poss;
     for (int i = 0; i < contadorMount; i++){
         if(a_mkfs[0]==arregloMountId[i]){
             path=arregloMountPath[i];
             name=arregloMountPart[i];
+            poss=i;
 
             flag_mkfs=true;
             break;
@@ -1705,10 +1742,16 @@ void mkfs(string a_mkfs[]){
     }
     
     if(flag_mkfs==true){
+        path2=path;
+        string auxpath="users.txt";
+        path2=path_sindisco(path2);
+        path2+=auxpath;
+        cout<<path2<<endl;
+        crearArchivo_UyG(path2);
         
         FILE *file;
         
-        file= fopen(path.c_str(),"rb+");
+        file= fopen(path.c_str(),"r+b");
         
         
         fseek(file,0,SEEK_SET);
@@ -1718,7 +1761,19 @@ void mkfs(string a_mkfs[]){
         fread(&mbr,sizeof(MBR),1,file);
 
         if(mbr.mbr_partition_1.part_name==name){
-            int pos=mbr.mbr_partition_1.part_start;
+            //cout<<poss<<endl;
+            //path_actual=arregloMountPath[poss];
+            cout<<path_actual<<endl;
+            int posi=mbr.mbr_partition_1.part_start;
+            int posf=mbr.mbr_partition_1.part_size;
+            //cout<<posi<<endl;
+            //cout<<posf<<endl;
+            
+            
+            
+
+            
+            
             /*prueba pru;
             
             pru.id=a_mkfs[0];
@@ -1729,6 +1784,8 @@ void mkfs(string a_mkfs[]){
             fwrite(&pru,sizeof(pru),1,file);*/
 
         }else if(mbr.mbr_partition_2.part_name==name){
+            //cout<<poss<<endl;
+            //path_actual=arregloMountPath[poss];
             int pos=mbr.mbr_partition_2.part_start;
             /*prueba pru;
             
@@ -1740,6 +1797,8 @@ void mkfs(string a_mkfs[]){
             fwrite(&pru,sizeof(pru),1,file);*/
 
         }else if(mbr.mbr_partition_3.part_name==name){
+            cout<<poss<<endl;
+            //path_actual=arregloMountPath[poss];
             /*int pos=mbr.mbr_partition_3.part_start;
             prueba pru;
             
@@ -1750,6 +1809,8 @@ void mkfs(string a_mkfs[]){
             
             fwrite(&pru,sizeof(pru),1,file);*/
         }else if(mbr.mbr_partition_4.part_name==name){
+            cout<<poss<<endl;
+            //path_actual=arregloMountPath[poss];
             /*int pos=mbr.mbr_partition_4.part_start;
             prueba pru;
             
@@ -1923,25 +1984,30 @@ void mostrarExt3(tablaInodos *inodos){
 }
             
     
-void crearArchivo_UyG(string path){
-    ofstream archivo;
 
-    archivo.open(path, ios::out);
-    if(archivo.fail()){
-        cout<<"No se pudo crear el archivo raiz usuarios y grupos"<<endl;
-    }
 
-    archivo<<"1,G,root"<<endl;
-    archivo<<"1,U,root,root,123"<<endl;
-    archivo.close();
-}
-
-void login(string user,string contra,string path){
+void login(string user, string contra, string id ){
+    string path;
     //int contadorlog=0;
+    int poss;
     string datos[5];
     int cont_datos;
     string aux_dato;
-    if(activa==false){
+    bool flag=false;
+
+    for (int i = 0; i < contadorMount; i++){
+        if(id==arregloMountId[i]){
+            path=arregloMountPath[i];
+            poss=i;
+
+            flag=true;
+            break;
+        }
+    }
+
+    path=path_sindisco(path);
+    path+="users.txt";
+    if(activa==false && flag==true){
         
         ifstream archivo;
         string texto;
@@ -1997,7 +2063,227 @@ void login(string user,string contra,string path){
 
 
     }else{
+        cout<<"No se puede iniciar sesion ya que hay un usuario activo o el id no existe"<<endl;
+    }
+}
+
+
+
+void mkgrp(string name, string path){
+    string datos[5];
+    int cont_datos;
+    string aux_dato;
+    int id_grupo;
+    bool flag=false;
+    
+    if(activa==false){
+        
+        ifstream archivo;
+        string texto;
+        string aux_texto;
+        archivo.open(path, ios:: out);
+        if(archivo.fail()){
+        cout<<"No se pudo leer en el archivo raiz usuarios y grupos. Por lo tanto no se podra iniciar sesion."<<endl;
+        }
+
+        while (!archivo.eof()){
+            //contadorlog+=1;
+            getline(archivo,texto);
+            //cout<<contadorlog<<texto<<endl;
+            //cout<<texto.length()<<endl;
+            //cout<<texto[8]<<endl;
+            cont_datos=0;
+            aux_texto+=texto+"\n";
+            
+            
+            for (int i = 0; i < texto.length(); i++){
+                if(texto[i]==','){
+                    cout<<aux_dato<<endl;
+                    datos[cont_datos]=aux_dato;
+                    cont_datos+=1;
+                    aux_dato="";
+
+                    
+                }else{
+                    if(i==texto.length()-1){
+                        aux_dato+=texto[i];
+                        cout<<aux_dato<<endl;
+                        datos[cont_datos]=aux_dato;
+                        cont_datos+=1;
+                        aux_dato="";
+                    }else{
+                        aux_dato+=texto[i];
+                    }
+                    
+                }
+                
+            }
+            //cout<<cont_datos<<endl;
+
+            if(cont_datos==3){
+                if(datos[2]==name){
+                    cout<<"Este grupo ya existe"<<endl;
+                    flag=false;
+                }else{
+                    flag=true;   
+                    id_grupo=stoi(datos[0]);
+                    cout<<"xxxxxxxxx "<<stoi(datos[0])+1<<endl;
+                }
+
+                
+                
+                
+            }
+
+
+            
+        }
+        archivo.close();
+
+        ofstream archivo1;
+
+        archivo1.open(path, ios::out);
+        if(archivo1.fail()){
+            cout<<"No se pudo crear el archivo raiz usuarios y grupos"<<endl;
+        }
+        archivo1<<aux_texto;
+        if(flag==true){
+            
+            archivo1<<stoi(datos[0])+1<<",G,"<<name;
+    
+        }
+        
+        archivo1.close();
+
+
+    }else{
         cout<<"No se puede iniciar sesion ya que hay un usuario activo!!!"<<endl;
     }
+        
+}
+void mkusr(string name,string contra, string grupo, string path){
+    string datos[5];
+    int cont_datos;
+    string aux_dato;
+    int id_grupo;
+    int cont_grupos=0;
+    bool flaguser=false;
+    bool flaggroup=false;
+    string arr_grupos[30];
+    if(activa==false){
+        
+        ifstream archivo;
+        string texto;
+        string aux_texto;
+        archivo.open(path, ios:: out);
+        if(archivo.fail()){
+        cout<<"No se pudo leer en el archivo raiz usuarios y grupos. Por lo tanto no se podra crear un nuevo usuario."<<endl;
+        }
+
+        while (!archivo.eof()){
+            //contadorlog+=1;
+            getline(archivo,texto);
+            //cout<<contadorlog<<texto<<endl;
+            //cout<<texto.length()<<endl;
+            //cout<<texto[8]<<endl;
+            cont_datos=0;
+            aux_texto+=texto+"\n";
+            
+            
+            for (int i = 0; i < texto.length(); i++){
+                if(texto[i]==','){
+                    cout<<aux_dato<<endl;
+                    datos[cont_datos]=aux_dato;
+                    cont_datos+=1;
+                    aux_dato="";
+
+                    
+                }else{
+                    if(i==texto.length()-1){
+                        aux_dato+=texto[i];
+                        cout<<aux_dato<<endl;
+                        datos[cont_datos]=aux_dato;
+                        cont_datos+=1;
+                        aux_dato="";
+                    }else{
+                        aux_dato+=texto[i];
+                    }
+                    
+                }
+                
+            }
+            cout<<"---"<<cont_datos<<endl;
+
+            if(cont_datos==3){
+                //cout<<"entre"<<cont_grupos<<endl;
+                arr_grupos[cont_grupos]=datos[2];
+                //cout<<"entre"<<endl;
+                cont_grupos+=1;
+            }
+
+            if(cont_datos==5){
+                if(datos[3]==name){
+                    flaguser=false;
+                    cout<<"Ya existe el usuario: "<<name<<" por lo tanto no se podrá crear." <<endl;
+                }else{
+                    id_grupo=stoi(datos[0]);
+                    flaguser=true;
+
+                }
+            }
+            /*if(cont_datos==2){
+                if(datos[2]==name){
+                    cout<<"Este grupo ya existe"<<endl;
+                    flag=false;
+                }else{
+                    flag=true;   
+                    id_grupo=stoi(datos[0]);
+                    cout<<"xxxxxxxxx "<<stoi(datos[0])+1<<endl;
+                }
+
+                
+                
+                
+            }*/
+
+
+            
+        }
+        archivo.close();
+
+        for (int i = 0; i < cont_grupos; i++){
+            if(grupo==arr_grupos[i]){
+                flaggroup=true;
+                break;
+            }else{
+                flaggroup=false;
+            }
+        }
+        
+        if(flaggroup==false){
+            cout<<"El grupo no existe: "<<grupo<<endl;
+        }
+        ofstream archivo1;
+
+        archivo1.open(path, ios::out);
+        if(archivo1.fail()){
+            cout<<"No se pudo crear el archivo raiz usuarios y grupos"<<endl;
+        }
+        archivo1<<aux_texto;
+        if(flaguser==true && flaggroup==true){
+            
+            archivo1<<id_grupo+1<<",U,"<< grupo <<","<<name<<","<<contra;
+    
+        }
+
+        
+        
+        archivo1.close();
+
+
+    }else{
+        cout<<"No se puede iniciar sesion ya que hay un usuario activo!!!"<<endl;
+    }
+        
 }
 
