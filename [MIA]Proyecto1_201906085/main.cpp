@@ -852,7 +852,7 @@ void commando(char *command){
         }
 
         if(fname==true){
-          cout<<arregloMountPath[0]<<endl;
+          //cout<<arregloMountPath[0]<<endl;
           mkgrp(name,pathId);
         }
 
@@ -923,6 +923,70 @@ void commando(char *command){
       cout<<"Hace falta algun parametro en Login para poder iniciar sesion."<<endl;
     }
     
+  }else if(strcasecmp(token,"mkusr")==0){
+    string pathId;
+    
+    int cont=0;
+    bool fname=false;
+    string name;
+    token = std::strtok(NULL, ">");
+    string mkuser[3];
+    //a_mkfs[1]="full";
+    //a_mkfs[1]="2fs";
+    
+    
+
+    
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        
+
+        if(strcasecmp(token,"-usr-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          mkuser[0]=token;
+          token = std::strtok(NULL, ">");
+          fname=true;
+          cont+=1;
+
+        }else if(strcasecmp(token,"-pass-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          mkuser[1]=token;
+          token = std::strtok(NULL, ">");
+          
+          cont+=1;
+        }else if(strcasecmp(token,"-grp-")==0){
+          token = std::strtok(NULL, " ");
+          std::cout << token << ' '<<endl;
+          mkuser[2]=token;
+          token = std::strtok(NULL, ">");
+          
+          cont+=1;
+        }else{
+          token=NULL;
+          
+        }
+
+        
+
+      
+    }
+
+    if(cont==3){
+      cout<<mkuser[0]<<mkuser[1]<<mkuser[2]<<endl;
+      mkusr(mkuser[0],mkuser[1],mkuser[2],path_actual);
+      
+    }else{
+      cout<<"Hace falta algun parametro en Login para poder iniciar sesion."<<endl;
+    }
+    
   }else if(strcasecmp(token,"logout")==0){
     activa=false;
     cout<<"Usted ha cerrado sesion"<<endl;
@@ -969,7 +1033,9 @@ int main(){
   //mkgrp("cr7","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
   //mkusr("sebas2","321","cr7","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
   //cout<<path_sindisco("/home/sebbbasdl/archivos/fase1/D1.dsk")<<endl;
-  terminal();
+  //rmgrp("usuario","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  rmusr("root","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  //terminal();
 
   
     /*string dato;
