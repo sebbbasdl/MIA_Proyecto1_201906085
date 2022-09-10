@@ -3,3 +3,5 @@ login -usr->root -pass->123 -id->vda1
 mkusr -usr->user3 -pass->321 -grp->usuario
 rmdisk -path->"/home/sebbbasdl/archivos/fase1/D1.dsk"
 rep -name->mbr -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte.jpg"
+rep -name->bm_bloc -id->851D1 -path->"/home/sebbbasdl/Documentos/prueba/reporte2.jpg"
+rep -name->disk -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte4.jpg"

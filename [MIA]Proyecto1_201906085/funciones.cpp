@@ -443,18 +443,20 @@ void reportes(string a_rep[]){
         archivodot<<"> ]\n";
         archivodot<<"}";
         
+        archivodot.close();
         //archivodot<<dot;
-        /*cout<<"SOY AUX"<<aux<<endl;
+        //cout<<"SOY AUX"<<aux<<endl;
         cout<<rutacreada+a_rep[2]+".dot"<<endl;
-        string gendot= " dot -Tpng "+rutacreada+a_rep[2]+".dot" +" -o "+aux;
+        string gendot= " dot -Tpng "+rutacreada+a_rep[2]+"mbr.dot" +" -o "+aux;
         string gendot2=" nohup display "+aux +" &";
 
         system(gendot.c_str());
-        system(gendot2.c_str()); */
-        string cmd="dot -Tjpg "+rutacreada+a_rep[2]+".dot"+" -o "+aux;
+        system(gendot2.c_str()); 
+        /*string cmd="dot -Tjpg "+rutacreada+a_rep[2]+".dot"+" -o "+aux;
         string cmd2="fim -a "+aux;
         system(cmd.c_str());
-        system(cmd2.c_str());
+        system(cmd2.c_str());*/
+    
 
 
     }else if(flag==true && a_rep[0]=="disk"){
@@ -496,20 +498,128 @@ void reportes(string a_rep[]){
             dot2+="<td port='port_four'>PRIMARIA</td>\n";
             
         }
+        
         dot2+="</tr>";
 
         dot2+=" </table>\n>];\n}";
         archivodot2<<dot2;
         cout<<dot2<<endl;
-        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+".dot " +" -o "+aux;
+        archivodot2.close();
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"disk.dot " +" -o "+aux;
         string gendot22=" nohup display "+aux +" &";
 
         system(gendot1.c_str());
         system(gendot22.c_str()); 
 
+    }else if(flag==true && a_rep[0]=="bm_bloc"){
+        int poss=0;
+        for (int i = 0; i < contadorMount ;i++){
+            if(a_rep[2]== arregloMountId[i]){
+                poss=i;
+                break;
+            }
+        }
+
+        ifstream archivo;
+        string text;
+        string auxtext;
+        string auxpath;
+        string path;
+        int poss1=0;
+        cout<<arregloMountPath[poss]<<endl;
+        auxpath=arregloMountPath[poss];
+
+        for (int i = 0; i < auxpath.length() ;i++){
+            if(auxpath[i]=='/'){
+                poss1=i;
+
+            }
+        }
+
+        for (int i = 0; i <= poss1; i++){
+            path+=auxpath[i];
+        }
+
+        cout<<path<<endl;
+        
+        
+        archivo.open(path+"users.txt",ios::in);
+
+        if(archivo.fail()){
+            cout<<"No se pudo abrir el archivo en bm_bloc"<<endl;
+        }
+        while(!archivo.eof()){
+            getline(archivo,text);
+            auxtext+=text+"\n";
+        }
+        //cout<<auxtext.length()-1<<endl;
+        int bytes=auxtext.length()-1;
+
+
+        archivo.close();
+
+        int cantidad=bytes/64;
+
+        string bitmap;
+
+        for (int i = 0; i < 400; i++){
+
+            if(i<=cantidad){
+                bitmap+="1";
+            }else{
+                bitmap+="0";
+            }
+        }
+
+        cout<<bitmap<<endl;
+
+        ofstream archivodot2(rutacreada+a_rep[2]+".dot");
+        int contaux;
+        string recolector;
+        archivodot2<<"digraph G{\n";
+        archivodot2<<"node [ shape=none fontname=Helvetica ]\n";
+        archivodot2<<"n [ label = <\n";
+        archivodot2<<"<table border=\"3\" bgcolor=\"blue\" color=\"black\">\n";
+
+        for (int i = 0; i < 400; i++){
+            contaux+=1;
+            recolector+=bitmap[i];
+            if(contaux==20){
+                
+                //archivodot2<<"<table border=\"3\" bgcolor=\"blue\" color=\"black\">\n";
+                archivodot2<<"<tr>\n";
+                archivodot2<<"<td bgcolor=\"#ccffcc\">"+recolector+"</td>\n";
+                archivodot2<<"</tr>\n";
+                recolector="";
+                contaux=0;
+
+
+
+            }
+            
+        }
+
+        archivodot2<<"</table>\n> ]\n}";
+
+
+
+        archivodot2.close();        
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"inode_bloc.dot " +" -o "+aux;
+        string gendot22=" nohup display "+aux +" &";
+
+        system(gendot1.c_str());
+        system(gendot22.c_str());
+
+        
+        
+        
+
+
     }else{
         cout<<"No se pudo generar ya que el id o la particion no existe."<<endl;
     }
+
+
 
 
     

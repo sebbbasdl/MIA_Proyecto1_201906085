@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstring>
 #include <algorithm>
+#include <sys/stat.h>
 
 #include "funciones.cpp"
 
@@ -1073,7 +1074,7 @@ int main(){
   //rmgrp("usuario","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
   //rmusr("root","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
   terminal();
-
+  
   
     /*string dato;
     string path;
