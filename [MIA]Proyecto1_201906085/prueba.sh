@@ -1,15 +1,14 @@
 
-Mkdisk -size->32 -path->"/home/sebbbasdl/archivos/fase1/" -name->D1.dsk
+Mkdisk -s->10 -path->"/home/sebbbasdl/archivos/fase1/D1.dsk"
 
 
 
 
 
 
-fdisk -tYpE->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI1 -Unit->K -fit->ff -sizE->200
-fdisk -tYpE->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI2 -Unit->K -fit->ff -sizE->200
-
-fdisk -tYpE->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3 -Unit->K -fit->ff -sizE->200
+fdisk -t->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI1 -u->K -f->ff -s->200
+fdisk -t->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI2 -u->K -f->ff -s->200
+fdisk -t->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3 -u->K -f->ff -s->200
 
 
 
@@ -21,7 +20,9 @@ mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI2
 
 mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3
 
-MkfS -id->vda1 -type->fast
+unmount -id->852D1
 
-login -usr->root -pass->123 -id->vda1
+MkfS -id->851D1 -type->fast
+
+login -usr->root -pass->123 -id->851D1
 

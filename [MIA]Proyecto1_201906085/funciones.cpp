@@ -536,6 +536,26 @@ void mount( string a_mount2[]){
     aux[1]=a_mount2[0];
     string path;
     path=pathsinC2(aux);
+    string nombredisco;
+    int poss=0;
+    int poss2=0;
+
+    for (int i = 0; i < path.length(); i++){
+        if(path[i]=='/'){
+            poss=i;
+        }
+
+        if(path[i]=='.'){
+            poss2=i;
+        }
+    }
+
+    for (int i = poss+1; i < poss2; i++){
+        nombredisco+=path[i];
+    }
+    
+    //cout<<"OOOOOOO "<<nombredisco<<endl;
+    
 
     cout<<path<<endl;
     FILE *file;
@@ -555,7 +575,7 @@ void mount( string a_mount2[]){
                 //cout<<"entre"<<endl;
                 mbr.mbr_partition_1.part_status='1';
                 //cout<<"-------------------"<<contadorDiscos1<<endl;
-                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                 arregloMountPart[contadorMount]=aux[0];
                 arregloMountPath[contadorMount]=path;
                 
@@ -566,7 +586,7 @@ void mount( string a_mount2[]){
                 fwrite(&mbr,sizeof(MBR),1,file);
             }else if( mbr.mbr_partition_2.part_name==aux[0]){
                 mbr.mbr_partition_1.part_status=='1';
-                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                 arregloMountPart[contadorMount]=aux[0];
                 arregloMountPath[contadorMount]=path;
                 contadorMount+=1;
@@ -576,7 +596,7 @@ void mount( string a_mount2[]){
                 fwrite(&mbr,sizeof(MBR),1,file);
                 
             }else if( mbr.mbr_partition_3.part_name==aux[0]){
-                arregloMountId[contadorMount]="vda"+std::to_string(contadorMount+1);
+                arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                 arregloMountPart[contadorMount]=aux[0];
                 arregloMountPath[contadorMount]=path;
                 contadorMount+=1;
@@ -587,7 +607,7 @@ void mount( string a_mount2[]){
                 fwrite(&mbr,sizeof(MBR),1,file);
                 
             }else if( mbr.mbr_partition_4.part_name==aux[0]){
-                arregloMountId[contadorMount]="vda"+std::to_string(contadorDiscos1+1);
+                arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                 arregloMountPart[contadorMount]=aux[0];
                 arregloMountPath[contadorMount]=path;
                 contadorMount+=1;
@@ -631,7 +651,7 @@ void mount( string a_mount2[]){
                         cout<<"mori3"<<endl;
                         mbr.mbr_partition_1.part_status='1';
                         
-                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         arregloMountPart[contadorMount]=aux[0];
                         arregloMountPath[contadorMount]=path;
                         arregloletra[contadorMount]=arregloletra[auxlugar];
@@ -647,7 +667,7 @@ void mount( string a_mount2[]){
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
                         cout<<"ESTO ESSS I : "<<i<<endl;
                         cout<<std::string(arregloletra[i])<<endl;
-                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         arregloMountPart[contadorMount]=aux[0];
                         arregloMountPath[contadorMount]=path;
                         arregloletra[contadorMount]=arregloletra[auxlugar];
@@ -661,7 +681,7 @@ void mount( string a_mount2[]){
                         cout<<"mori3"<<endl;
                         mbr.mbr_partition_3.part_status='1';
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
-                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         arregloMountPart[contadorMount]=aux[0];
                         arregloMountPath[contadorMount]=path;
                         arregloletra[contadorMount]=arregloletra[auxlugar];
@@ -675,7 +695,7 @@ void mount( string a_mount2[]){
                         cout<<"mori3"<<endl;
                         mbr.mbr_partition_4.part_status='1';
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
-                        arregloMountId[contadorMount]="vd"+arregloletra[auxlugar]+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         arregloMountPart[contadorMount]=aux[0];
                         arregloMountPath[contadorMount]=path;
                         arregloletra[contadorMount]=arregloletra[auxlugar];
@@ -697,7 +717,7 @@ void mount( string a_mount2[]){
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
                         cout<<abecedario(2)<<endl;
                         
-                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         
                         arregloMountPart[contadorMount]=aux[0];
                         
@@ -720,7 +740,7 @@ void mount( string a_mount2[]){
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
                         cout<<abecedario(2)<<endl;
                         
-                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         
                         arregloMountPart[contadorMount]=aux[0];
                         
@@ -744,7 +764,7 @@ void mount( string a_mount2[]){
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
                         cout<<abecedario(2)<<endl;
                         
-                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         
                         arregloMountPart[contadorMount]=aux[0];
                         
@@ -768,7 +788,7 @@ void mount( string a_mount2[]){
                         //cout<<"-------------------"<<contadorDiscos1<<endl;
                         cout<<abecedario(2)<<endl;
                         
-                        arregloMountId[contadorMount]="vd"+std::string(abecedario(contadorDiscos1))+std::to_string(contt);
+                        arregloMountId[contadorMount]="85"+std::to_string(contadorMount+1)+nombredisco;
                         
                         arregloMountPart[contadorMount]=aux[0];
                         
@@ -841,9 +861,9 @@ void crearDisco(string a_mkdisk2[]){
       cout<<a_mkdisk2[i]<<endl;
     }
 
-    path =pathsinC(a_mkdisk2) + a_mkdisk2[2];
+    path =pathsinC2(a_mkdisk2);
     //char path2[255] = "/tmp/d1.dk";
-    std::cout<<path<<endl;
+    std::cout<<"ijjija"<<path<<endl;
 
     string arreglopath[30];
     string dato;
@@ -2301,7 +2321,7 @@ void rmgrp(string name,string path){
     int id_grupo;
     bool flag=false;
     path= path_actual;
-    if(activa==false && usuario_actual=="root"){
+    if(activa==true && usuario_actual=="root"){
         
         ifstream archivo;
         string texto;
@@ -2406,8 +2426,8 @@ void rmusr(string user, string path){
     string aux_dato;
     int id_grupo;
     bool flag=false;
-    //path= path_actual;
-    if(activa==false /*&& usuario_actual=="root"*/){
+    path= path_actual;
+    if(activa==true && usuario_actual=="root"){
         
         ifstream archivo;
         string texto;
@@ -2503,4 +2523,21 @@ void rmusr(string user, string path){
     }else{
         cout<<"No se puede crear un grupo ya que la sesion no es del usuario root"<<endl;
     }
+}
+
+void unmount(string id){
+    //arregloMount[0].erase(0);
+    int dato;
+    for (int i = 0; i < contadorMount; i++){
+        if(id==arregloMountId[i]){
+            dato=i;
+            break;
+        }
+    }
+    cout<<"///////"<<dato<<endl;
+    
+    arregloMountId[dato].erase(0);
+    arregloMountPart[dato].erase(0);
+    arregloMountPath[dato].erase(0);
+    
 }

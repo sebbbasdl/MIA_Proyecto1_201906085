@@ -84,7 +84,7 @@ void commando(char *command){
     string a_mkdisk[3];
     //Mkdisk $size=>8 $path=>”/home/sebbbasdl/Documentos/prueba/” $name=>Disco1.dsk
     int cont=0;
-    
+    a_mkdisk[2]="m";
     token = std::strtok(NULL, ">");
     while (token){
         //std::cout << token << ' '<<endl;
@@ -96,7 +96,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"-size-")==0){
+        if(strcasecmp(token,"-s-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_mkdisk[0]=token;
@@ -112,13 +112,23 @@ void commando(char *command){
           token = std::strtok(NULL, ">");
           cont+=1;
 
-        }else if (strcasecmp(token,"name-")==0 ||strcasecmp(token,"-name-")==0 ){
-          token = std::strtok(NULL, " ");
-          std::cout << token << ' '<<endl;
-          a_mkdisk[2]=token;
-          token = std::strtok(NULL, ">");
-          cont+=1;
+        
 
+        }else if (strcasecmp(token,"u-")==0 || strcasecmp(token,"-u-")==0){
+          token = std::strtok(NULL, " ");
+          cout<<"buenas"<<endl;
+          std::cout << token << ' '<<endl;
+          if(strcasecmp(token,"k")==0|| strcasecmp(token,"m")==0){
+            
+            a_mkdisk[2]=token;
+            token = std::strtok(NULL, ">");
+            
+          }else{
+            break;
+          }
+
+          
+        
         }else{
           token=NULL;
           cout<<"Falta algun parametro en mkdisk"<<endl;
@@ -127,7 +137,7 @@ void commando(char *command){
         
     }
 
-    if(cont==3 && stoi(a_mkdisk[0])%8==0){
+    if(cont==2 ){
      crearDisco(a_mkdisk);
     }else{
       cout<<"No se pudo crear disco"<<endl;
@@ -192,7 +202,7 @@ void commando(char *command){
         }*/
         
 
-        if(strcasecmp(token,"-size-")==0){
+        if(strcasecmp(token,"-s-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
           a_fdisk[0]=token;
@@ -227,7 +237,7 @@ void commando(char *command){
           fname=true;
 
         
-        }else if (strcasecmp(token,"-unit-")==0){
+        }else if (strcasecmp(token,"-u-")==0){
           token = std::strtok(NULL, " ");
           
           std::cout << token << ' '<<endl;
@@ -242,7 +252,7 @@ void commando(char *command){
 
           
         
-        }else if (strcasecmp(token,"-type-")==0){
+        }else if (strcasecmp(token,"-t-")==0){
 
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
@@ -256,7 +266,7 @@ void commando(char *command){
           }
           
 
-        }else if (strcasecmp(token,"-fit-")==0){
+        }else if (strcasecmp(token,"-f-")==0){
           token = std::strtok(NULL, " ");
           std::cout << token << ' '<<endl;
 
@@ -415,7 +425,7 @@ void commando(char *command){
     //cout<<"--"<<contador<<endl;
     //std::cout<<token[3]<<endl;
     
-    token = std::strtok(NULL, ">");
+    /*token = std::strtok(NULL, ">");
     
     while(token){
       aux=token[3];
@@ -430,12 +440,37 @@ void commando(char *command){
         
       }
       
-    }
+    }*/
     /*cout<<"--ARREGLO UNMOUNT--"<<endl;
     for (int i = 0; i < cont; i++){
       cout<<a_unmount[i]<<endl;
     }*/
+    string idd;
+    token = std::strtok(NULL, ">");
+    while (token){
+        //std::cout << token << ' '<<endl;
+        std::cout << token<< ' '<<endl;
+        /*if(token[0]=='$'||token[0]=='M'||token[0]=='m'  ){
+          token = std::strtok(NULL, ">");
+          cout<<"entre"<<endl;
+          std::cout << token<< ' '<<endl;
+        }*/
+        //cout<<fmount<<endl;
 
+        if (strcasecmp(token,"-id-")==0){
+          
+          token = std::strtok(NULL, "-");
+          
+          std::cout << token << ' '<<endl;
+          idd=token;
+          token = std::strtok(NULL, ">");
+          
+
+        }
+
+    }
+
+    unmount(idd);    
     
   
   
@@ -457,8 +492,8 @@ void commando(char *command){
     
       
 
-  }else if(strcasecmp(token,"/*")==0){
-    token = std::strtok(NULL, "*");
+  }else if(strcasecmp(token,"#")==0){
+    token = std::strtok(NULL, "");
     cout<<token<<endl;
 
 
@@ -989,6 +1024,8 @@ void commando(char *command){
     
   }else if(strcasecmp(token,"logout")==0){
     activa=false;
+    usuario_actual="";
+    path_actual="";
     cout<<"Usted ha cerrado sesion"<<endl;
   }else{
     cout<<"¡Error, este comando no existe!"<<endl;
@@ -1034,8 +1071,8 @@ int main(){
   //mkusr("sebas2","321","cr7","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
   //cout<<path_sindisco("/home/sebbbasdl/archivos/fase1/D1.dsk")<<endl;
   //rmgrp("usuario","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
-  rmusr("root","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
-  //terminal();
+  //rmusr("root","/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_201906085/Users.txt");
+  terminal();
 
   
     /*string dato;
