@@ -2,3 +2,4 @@ exec -path->"/home/sebbbasdl/Documentos/MIA_Proyecto1_201906085/[MIA]Proyecto1_2
 login -usr->root -pass->123 -id->vda1
 mkusr -usr->user3 -pass->321 -grp->usuario
 rmdisk -path->"/home/sebbbasdl/archivos/fase1/D1.dsk"
+rep -name->mbr -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte.jpg"

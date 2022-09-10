@@ -20,7 +20,7 @@ mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI2
 
 mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3
 
-unmount -id->852D1
+
 
 MkfS -id->851D1 -type->fast
 
