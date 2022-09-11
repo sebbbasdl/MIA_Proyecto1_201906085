@@ -1528,10 +1528,10 @@ void crearParticion(string a_fkdisk2[]){
         std::cout<<mbr.mbr_partition_1.part_status<<endl;
     
         if(a_fkdisk2[3]=="m"){
-            cout<<"hola 3"<<endl;
+            //cout<<"hola 3"<<endl;
             sizefdisk=stoi(a_fkdisk2[0])*1024*1024;
         }else if(a_fkdisk2[3]=="K"){
-            cout<<"hola 4"<<endl;
+            //cout<<"hola 4"<<endl;
             sizefdisk=stoi(a_fkdisk2[0])*1024;
         }else if(a_fkdisk2[3]=="b"){
             
@@ -3028,5 +3028,64 @@ void unmount(string id){
     arregloMountId[dato].erase(0);
     arregloMountPart[dato].erase(0);
     arregloMountPath[dato].erase(0);
+    
+}
+
+
+void fdisk_delete(string name, string path ,string a_fkdisk2[]){
+    int sizefdisk;
+    path =pathsinC(a_fkdisk2);
+
+    path+=".dsk";
+    cout<<"----"<<path<<endl;
+
+    bool flagf=true;
+
+    FILE *file;
+    file= fopen(path.c_str(),"rb+");
+    
+    if(file==NULL){
+        cout<<"El disco no existe."<<endl;
+        return;
+    }else{
+        fseek(file,0,SEEK_SET);
+        MBR mbr;
+        fread(&mbr,sizeof(MBR),1,file);
+        //cout<<"hola 2"<<endl;
+        //cout<<mbr.mbr_tamano<<endl;
+
+        if(mbr.mbr_partition_1.part_name==name){
+            mbr.mbr_partition_1.part_status='e';
+            mbr.mbr_partition_1.part_fit='-';
+            mbr.mbr_partition_1.part_name[0]='\0';
+            mbr.mbr_partition_1.part_size=-1;
+            mbr.mbr_partition_1.part_start=-1;
+            mbr.mbr_partition_1.part_type='-';
+        }else  if(mbr.mbr_partition_2.part_name==name){
+            mbr.mbr_partition_2.part_status='e';
+            mbr.mbr_partition_2.part_fit='-';
+            mbr.mbr_partition_2.part_name[0]='\0';
+            mbr.mbr_partition_2.part_size=-1;
+            mbr.mbr_partition_2.part_start=-1;
+            mbr.mbr_partition_2.part_type='-';
+        }else if(mbr.mbr_partition_3.part_name==name){
+            mbr.mbr_partition_3.part_status='e';
+            mbr.mbr_partition_3.part_fit='-';
+            mbr.mbr_partition_3.part_name[0]='\0';
+            mbr.mbr_partition_3.part_size=-1;
+            mbr.mbr_partition_3.part_start=-1;
+            mbr.mbr_partition_3.part_type='-';
+        }else if(mbr.mbr_partition_4.part_name==name){
+            mbr.mbr_partition_4.part_status='e';
+            mbr.mbr_partition_4.part_fit='-';
+            mbr.mbr_partition_4.part_name[0]='\0';
+            mbr.mbr_partition_4.part_size=-1;
+            mbr.mbr_partition_4.part_start=-1;
+            mbr.mbr_partition_4.part_type='-';
+        }else{
+            cout<<"No existe esta particion: "+name+"por lo tanto no se puede eliminar"<<endl;
+        }
+    }
+    fclose(file); 
     
 }

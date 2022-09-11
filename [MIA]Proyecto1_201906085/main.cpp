@@ -316,6 +316,7 @@ void commando(char *command){
 
     if(fdelete==true && fpath==true && fname==true && cont==3){
       cout<<"Delete correcto"<<endl;
+      fdisk_delete(a_fdisk[2],a_fdisk[1], a_fdisk);
     }else if (fadd==true && fpath==true && fname==true){
       cout<<"Add correcto"<<endl;
       fdisk_add(a_fdisk);

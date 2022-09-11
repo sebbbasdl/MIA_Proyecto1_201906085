@@ -12,6 +12,7 @@ fdisk -t->p -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3 -u->K -f-
 
 
 
+
 mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI1
 
 
@@ -23,5 +24,5 @@ mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3
 
 
 MkfS -id->851D1 -type->fast
-rep -name->block -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte5.jpg"
+rep -name->disk -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte5.jpg"
 
