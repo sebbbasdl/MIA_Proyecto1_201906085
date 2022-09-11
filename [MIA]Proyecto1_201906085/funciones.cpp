@@ -301,7 +301,7 @@ void reportes(string a_rep[]){
     
     if(flag==true && a_rep[0]=="mbr"){
         
-        ofstream archivodot(rutacreada+a_rep[2]+".dot");
+        ofstream archivodot(rutacreada+a_rep[2]+"mbr.dot");
         
         //archivodot<<"hola serenexo"<<endl;
     
@@ -461,7 +461,7 @@ void reportes(string a_rep[]){
 
     }else if(flag==true && a_rep[0]=="disk"){
         
-        ofstream archivodot2(rutacreada+a_rep[2]+".dot");
+        ofstream archivodot2(rutacreada+a_rep[2]+"disk.dot");
         string dot2;
         dot2+="digraph H {\n";
         dot2+=" parent [shape=plaintext \nlabel=<\n";
@@ -564,7 +564,7 @@ void reportes(string a_rep[]){
 
         for (int i = 0; i < 400; i++){
 
-            if(i<=cantidad){
+            if(i<=cantidad+1){
                 bitmap+="1";
             }else{
                 bitmap+="0";
@@ -573,7 +573,7 @@ void reportes(string a_rep[]){
 
         cout<<bitmap<<endl;
 
-        ofstream archivodot2(rutacreada+a_rep[2]+".dot");
+        ofstream archivodot2(rutacreada+a_rep[2]+"bm_bloc.dot");
         int contaux;
         string recolector;
         archivodot2<<"digraph G{\n";
@@ -604,7 +604,7 @@ void reportes(string a_rep[]){
 
 
         archivodot2.close();        
-        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"inode_bloc.dot " +" -o "+aux;
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"bm_bloc.dot " +" -o "+aux;
         string gendot22=" nohup display "+aux +" &";
 
         system(gendot1.c_str());
@@ -615,17 +615,371 @@ void reportes(string a_rep[]){
         
 
 
+    }else if(flag==true && a_rep[0]=="bm_inode"){
+
+        int poss=0;
+        for (int i = 0; i < contadorMount ;i++){
+            if(a_rep[2]== arregloMountId[i]){
+                poss=i;
+                break;
+            }
+        }
+
+        ifstream archivo;
+        string text;
+        string auxtext;
+        string auxpath;
+        string path;
+        int poss1=0;
+        cout<<arregloMountPath[poss]<<endl;
+        auxpath=arregloMountPath[poss];
+
+        for (int i = 0; i < auxpath.length() ;i++){
+            if(auxpath[i]=='/'){
+                poss1=i;
+
+            }
+        }
+
+        for (int i = 0; i <= poss1; i++){
+            path+=auxpath[i];
+        }
+
+        cout<<path<<endl;
+        
+        
+        archivo.open(path+"users.txt",ios::in);
+
+        if(archivo.fail()){
+            cout<<"No se pudo abrir el archivo en bm_bloc"<<endl;
+        }
+        while(!archivo.eof()){
+            getline(archivo,text);
+            auxtext+=text+"\n";
+        }
+        //cout<<auxtext.length()-1<<endl;
+        int bytes=auxtext.length()-1;
+
+
+        archivo.close();
+
+        int cantidad=2;
+
+        string bitmap;
+
+        for (int i = 0; i < 400; i++){
+
+            if(i<=cantidad){
+                bitmap+="1";
+            }else{
+                bitmap+="0";
+            }
+        }
+
+        cout<<bitmap<<endl;
+
+        ofstream archivodot2(rutacreada+a_rep[2]+"bm_inode.dot");
+        int contaux;
+        string recolector;
+        archivodot2<<"digraph G{\n";
+        archivodot2<<"node [ shape=none fontname=Helvetica ]\n";
+        archivodot2<<"n [ label = <\n";
+        archivodot2<<"<table border=\"3\" bgcolor=\"blue\" color=\"black\">\n";
+
+        for (int i = 0; i < 400; i++){
+            contaux+=1;
+            recolector+=bitmap[i];
+            if(contaux==20){
+                
+                //archivodot2<<"<table border=\"3\" bgcolor=\"blue\" color=\"black\">\n";
+                archivodot2<<"<tr>\n";
+                archivodot2<<"<td bgcolor=\"red\">"+recolector+"</td>\n";
+                archivodot2<<"</tr>\n";
+                recolector="";
+                contaux=0;
+
+
+
+            }
+            
+        }
+
+        archivodot2<<"</table>\n> ]\n}";
+
+
+
+        archivodot2.close();        
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"bm_inode.dot " +" -o "+aux;
+        string gendot22=" nohup display "+aux +" &";
+
+        system(gendot1.c_str());
+        system(gendot22.c_str());
+        archivo.close();
+
+
+
+    }else if(flag==true && a_rep[0]=="inode"){
+        //ifstream archivo;
+        //string texto;
+
+        int poss=0;
+        for (int i = 0; i < contadorMount ;i++){
+            if(a_rep[2]== arregloMountId[i]){
+                poss=i;
+                break;
+            }
+        }
+
+        ifstream archivo;
+        string text;
+        string auxtext;
+        string auxpath;
+        string path;
+        int poss1=0;
+        cout<<arregloMountPath[poss]<<endl;
+        auxpath=arregloMountPath[poss];
+
+        for (int i = 0; i < auxpath.length() ;i++){
+            if(auxpath[i]=='/'){
+                poss1=i;
+
+            }
+        }
+
+        for (int i = 0; i <= poss1; i++){
+            path+=auxpath[i];
+        }
+
+        cout<<path<<endl;
+        
+        
+        archivo.open(path+"users.txt",ios::in);
+
+        if(archivo.fail()){
+            cout<<"No se pudo abrir el archivo en bm_bloc"<<endl;
+        }
+        while(!archivo.eof()){
+            getline(archivo,text);
+            auxtext+=text+"\n";
+        }
+        //cout<<auxtext.length()-1<<endl;
+        int bytes=auxtext.length()-1;
+
+
+        archivo.close();
+
+        int cantidad=2;
+
+        string bitmap;
+
+        for (int i = 0; i < 400; i++){
+
+            if(i<=cantidad){
+                bitmap+="1";
+            }else{
+                bitmap+="0";
+            }
+        }
+
+        //cout<<bitmap<<endl;
+
+        
+        int contaux;
+        string recolector;
+
+        time_t current_time;
+        int i_uid=1;
+        int i_gid=1;
+        int i_size=0;
+        time_t i_atime=time(nullptr) ;
+        time_t i_ctime=time(nullptr) ;
+        time_t i_mtime=time(nullptr) ;
+        int i_block[12];
+        i_block[0]=1;
+        i_block[1]=-1;
+        i_block[2]=-1;
+        i_block[3]=-1;
+        i_block[4]=-1;
+        i_block[5]=-1;
+        i_block[6]=-1;
+        i_block[7]=-1;
+        i_block[8]=-1;
+        i_block[9]=-1;
+        i_block[10]=-1;
+        i_block[11]=-1;
+        i_block[12]=-1;
+        //cout<<"hola"<<endl;
+
+        string fecha=ctime( &i_atime);
+        //string fecha=ctime( &mbr.mbr_fecha_creacion);
+        /*for (int i = 1; i <= 12; i++){
+            i_block[i]=0;
+        }*/
+        cout<<fecha<<endl;
+        
+        int i_type=0;
+        
+        ofstream archivodot(rutacreada+a_rep[2]+"inode.dot");
+        //cout<<"hola"<<endl;
+        archivodot<<"digraph {\n";
+        archivodot<<"graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];\n";
+        archivodot<<"node [shape=plain]\n";
+        archivodot<<"rankdir=LR;\n";
+        archivodot<<"Foo [label=<\n";
+        archivodot<<"<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n";
+        archivodot<<"<tr><td><i>Inode</i></td></tr>\n<tr><td port=\"1\">i_uid: "+to_string(i_uid)+"</td></tr>\n<tr><td port=\"2\">i_gid: "+to_string(i_gid)+"</td></tr>\n<tr><td port=\"3\">i_size: "+to_string(i_size)+"</td></tr>\n<tr><td port=\"4\">i_atime: "+fecha+"</td></tr>\n<tr><td port=\"5\">i_ctime: "+ctime(&i_ctime)+"</td></tr>\n<tr><td port=\"6\">i_mtime: "+ctime(&i_mtime)+"</td></tr>\n<tr><td port=\"7\">"+to_string(i_block[0])+"</td></tr>\n<tr><td port=\"8\">"+to_string(i_block[1])+"</td></tr>\n<tr><td port=\"9\">"+to_string(i_block[2])+"</td></tr>\n<tr><td port=\"10\">"+to_string(i_block[3])+"</td></tr>\n<tr><td port=\"11\">"+to_string(i_block[4])+"</td></tr>\n<tr><td port=\"12\">"+to_string(i_block[5])+"</td></tr>\n<tr><td port=\"13\">"+to_string(i_block[6])+"</td></tr>\n<tr><td port=\"14\">"+to_string(i_block[7])+"</td></tr>\n<tr><td port=\"15\">"+to_string(i_block[8])+"</td></tr>\n<tr><td port=\"16\">"+to_string(i_block[9])+"</td></tr>\n<tr><td port=\"17\">"+to_string(i_block[10])+"</td></tr>\n<tr><td port=\"18\">"+to_string(i_block[11])+"</td></tr>\n<tr><td port=\"18\">i_type: "+to_string(i_type)+"</td></tr>\n";
+        archivodot<<"</table>>];";
+
+        
+
+
+        i_uid=1;
+        i_gid=1;
+        i_size=bytes;
+        i_atime=time(nullptr) ;
+        i_ctime=time(nullptr) ;
+        i_mtime=time(nullptr) ;
+        i_block[12];
+        /*for (int i = 0; i < 12; i++){
+            if(i<=cantidad){
+                i_block[i]=1;
+            }else{
+                i_block[i]=-1;
+            }
+            
+        }*/
+        
+        i_block[0]=1;
+        i_type=1;
+
+        archivodot<<"inode [label=<\n";
+        archivodot<<"<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n";
+        archivodot<<"<tr><td><i>Inode2</i></td></tr>\n<tr><td port=\"1\">i_uid: "+to_string(i_uid)+"</td></tr>\n<tr><td port=\"2\">i_gid: "+to_string(i_gid)+"</td></tr>\n<tr><td port=\"3\">i_size: "+to_string(i_size)+"</td></tr>\n<tr><td port=\"4\">i_atime: "+fecha+"</td></tr>\n<tr><td port=\"5\">i_ctime: "+ctime(&i_ctime)+"</td></tr>\n<tr><td port=\"6\">i_mtime: "+ctime(&i_mtime)+"</td></tr>\n<tr><td port=\"7\">"+to_string(i_block[0])+"</td></tr>\n<tr><td port=\"8\">"+to_string(i_block[1])+"</td></tr>\n<tr><td port=\"9\">"+to_string(i_block[2])+"</td></tr>\n<tr><td port=\"10\">"+to_string(i_block[3])+"</td></tr>\n<tr><td port=\"11\">"+to_string(i_block[4])+"</td></tr>\n<tr><td port=\"12\">"+to_string(i_block[5])+"</td></tr>\n<tr><td port=\"13\">"+to_string(i_block[6])+"</td></tr>\n<tr><td port=\"14\">"+to_string(i_block[7])+"</td></tr>\n<tr><td port=\"15\">"+to_string(i_block[8])+"</td></tr>\n<tr><td port=\"16\">"+to_string(i_block[9])+"</td></tr>\n<tr><td port=\"17\">"+to_string(i_block[10])+"</td></tr>\n<tr><td port=\"18\">"+to_string(i_block[11])+"</td></tr>\n<tr><td port=\"18\">i_type: "+to_string(i_type)+"</td></tr>\n";
+        
+        archivodot<<"</table>>];";
+        archivodot<<"Foo:1 -> inode:a;\n";
+
+
+
+        archivodot<<"}";
+        archivodot.close();        
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"inode.dot " +" -o "+aux;
+        string gendot22=" nohup display "+aux +" &";
+
+        system(gendot1.c_str());
+        system(gendot22.c_str());
+        archivo.close();
+
+        //cout<<"muero"<<endl;
+
+        
+
+
+    }else if(flag==true && a_rep[0]=="block"){
+        
+        int poss=0;
+        for (int i = 0; i < contadorMount ;i++){
+            if(a_rep[2]== arregloMountId[i]){
+                poss=i;
+                break;
+            }
+        }
+
+        ifstream archivo;
+        string text;
+        string auxtext;
+        string auxpath;
+        string path;
+        int poss1=0;
+        cout<<arregloMountPath[poss]<<endl;
+        auxpath=arregloMountPath[poss];
+
+        for (int i = 0; i < auxpath.length() ;i++){
+            if(auxpath[i]=='/'){
+                poss1=i;
+
+            }
+        }
+
+        for (int i = 0; i <= poss1; i++){
+            path+=auxpath[i];
+        }
+
+        cout<<path<<endl;
+        
+        
+        archivo.open(path+"users.txt",ios::in);
+
+        if(archivo.fail()){
+            cout<<"No se pudo abrir el archivo en bm_bloc"<<endl;
+        }
+        while(!archivo.eof()){
+            getline(archivo,text);
+            auxtext+=text+"\n";
+        }
+        //cout<<auxtext.length()-1<<endl;
+        int bytes=auxtext.length()-1;
+
+
+        archivo.close();
+
+        int cantidad=2;
+
+        string bitmap;
+
+        for (int i = 0; i < 400; i++){
+
+            if(i<=cantidad){
+                bitmap+="1";
+            }else{
+                bitmap+="0";
+            }
+        }
+
+        cout<<bitmap<<endl;
+
+        ofstream archivodot2(rutacreada+a_rep[2]+"block.dot");
+        int contaux;
+        string recolector;
+        archivodot2<<"digraph {\n";
+        archivodot2<<"graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];\n";
+        archivodot2<<"node [shape=plain]\n";
+        archivodot2<<"rankdir=LR;\n";
+        archivodot2<<"Foo [label=<\n";
+        archivodot2<<"<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n";
+        archivodot2<<"<tr><td><i>Bloque Carpeta</i></td></tr>\n";
+
+        archivodot2<<"</table>>];";
+
+        archivodot2<<"data [label=<\n";
+        archivodot2<<"<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n";
+        archivodot2<<"<tr><td><i>"+auxtext+"</i></td></tr>\n";
+
+        archivodot2<<"</table>>];";
+        archivodot2<<"Foo:1 -> data:a;\n";
+
+
+
+        archivodot2<<"}";
+
+        archivodot2.close();        
+        string gendot1= " dot -Tjpg "+rutacreada+a_rep[2]+"block.dot " +" -o "+aux;
+        string gendot22=" nohup display "+aux +" &";
+
+        system(gendot1.c_str());
+        system(gendot22.c_str());
+        archivo.close();
     }else{
         cout<<"No se pudo generar ya que el id o la particion no existe."<<endl;
     }
 
-
+    
 
 
     
 
 
-    //fclose(file);
+    fclose(file);
 }
 
 void rmdisk(string pathh){
@@ -1168,7 +1522,7 @@ void crearParticion(string a_fkdisk2[]){
         fseek(file,0,SEEK_SET);
         MBR mbr;
         fread(&mbr,sizeof(MBR),1,file);
-        cout<<"hola 2"<<endl;
+        //cout<<"hola 2"<<endl;
         cout<<mbr.mbr_tamano<<endl;
 
         std::cout<<mbr.mbr_partition_1.part_status<<endl;
@@ -1186,9 +1540,9 @@ void crearParticion(string a_fkdisk2[]){
 
 
         if(a_fkdisk2[4]=="p" || a_fkdisk2[4]=="e"){
-            cout<<"hola 5"<<endl;
+            //cout<<"hola 5"<<endl;
         
-            cout<<"hola 6"<<endl;
+            //cout<<"hola 6"<<endl;
             if(mbr.mbr_partition_1.part_status=='0' && mbr.mbr_partition_2.part_status=='0' && mbr.mbr_partition_3.part_status=='0' && mbr.mbr_partition_4.part_status=='0'){
                 cout<<"Todas las particiones estan ocupadas";
                 flagf==false;
@@ -1217,7 +1571,7 @@ void crearParticion(string a_fkdisk2[]){
             //se puede crear particion l
         }else{
             //se puede crear particion extendida o primaria
-            cout<<"hola 7"<<endl;
+            //cout<<"hola 7"<<endl;
             bool hayespacio=false;
             int espaciototal=mbr.mbr_tamano - sizeof(mbr);
             int arreglo_espacios[4];
@@ -1232,9 +1586,9 @@ void crearParticion(string a_fkdisk2[]){
             int arr4=0;
 
             if(mbr.mbr_partition_1.part_status=='e' && mbr.mbr_partition_2.part_status=='e' && mbr.mbr_partition_3.part_status=='e' && mbr.mbr_partition_4.part_status=='e' ){
-                cout<<"entre 0"<<endl;
+                //cout<<"entre 0"<<endl;
                 if(sizefdisk<= espaciototal){
-                    cout<<"entre"<<endl;
+                    //cout<<"entre"<<endl;
                     cout<<mbr.mbr_tamano<<endl;
                     cout<<espaciototal<<endl;
                     mbr.mbr_partition_1.part_status='0';
@@ -1887,14 +2241,28 @@ void mkfs(string a_mkfs[]){
         
         file= fopen(path.c_str(),"r+b");
         
+        MBR mbr;
         
         fseek(file,0,SEEK_SET);
         
-        MBR mbr;
+        /*tablaInodos tablai;
         
-        fread(&mbr,sizeof(MBR),1,file);
+        fread(&tablai,sizeof(tablaInodos),1,file);
+        time_t current_time;
+        tablai.i_uid=1;
+        tablai.i_gid=1;
+        tablai.i_size=0;
+        tablai.i_atime=time(nullptr);
+        tablai.i_ctime=time(nullptr);
+        tablai.i_mtime=time(nullptr);
+        tablai.i_block[0]=1;
+        tablai.i_block[1]=1;
+        tablai.i_type=0;*/
+        
 
-        if(mbr.mbr_partition_1.part_name==name){
+
+
+        /*if(mbr.mbr_partition_1.part_name==name){
             //cout<<poss<<endl;
             //path_actual=arregloMountPath[poss];
             cout<<path_actual<<endl;
@@ -1915,7 +2283,7 @@ void mkfs(string a_mkfs[]){
             
             rewind(file);
             
-            fwrite(&pru,sizeof(pru),1,file);*/
+            fwrite(&pru,sizeof(pru),1,file);
 
         }else if(mbr.mbr_partition_2.part_name==name){
             //cout<<poss<<endl;
@@ -1928,7 +2296,7 @@ void mkfs(string a_mkfs[]){
             
             rewind(file);
             
-            fwrite(&pru,sizeof(pru),1,file);*/
+            fwrite(&pru,sizeof(pru),1,file);
 
         }else if(mbr.mbr_partition_3.part_name==name){
             cout<<poss<<endl;
@@ -1941,7 +2309,7 @@ void mkfs(string a_mkfs[]){
             
             rewind(file);
             
-            fwrite(&pru,sizeof(pru),1,file);*/
+            fwrite(&pru,sizeof(pru),1,file);
         }else if(mbr.mbr_partition_4.part_name==name){
             cout<<poss<<endl;
             //path_actual=arregloMountPath[poss];
@@ -1953,16 +2321,23 @@ void mkfs(string a_mkfs[]){
             
             rewind(file);
             
-            fwrite(&pru,sizeof(pru),1,file);*/
+            fwrite(&pru,sizeof(pru),1,file);
             
-        } 
+        } */
         
         
         fclose(file);
 
 
-        
-
+        /*file = fopen(path.c_str(),"rb+");
+        tablaInodos tablai2;
+        fseek(file,0,SEEK_SET);
+        fread(&tablai2,sizeof(tablaInodos),1,file);
+        cout<<"INODOOOO"<<endl;
+        std::cout<<tablai2.i_size<<endl;
+        //std::cout<<mbr2.mbr_partition_2.part_fit<<endl;
+        fclose(file);
+        */  
         
     }else{
         cout<<"No se encontre el Id en la lista de particiones montadas."<<endl;
@@ -1989,7 +2364,7 @@ void mkfs(string a_mkfs[]){
 
 
 
-void insertar(tablaInodos *&inodo , string id, char tipo, string path){
+/*void insertar(tablaInodos *&inodo , string id, char tipo, string path){
     
     int contadorinodos=0;
     int contadorbloques=0;
@@ -2114,11 +2489,11 @@ void mostrarExt3(tablaInodos *inodos){
         }
         
 
-    }*/
+    }
 }
             
     
-
+*/
 
 void login(string user, string contra, string id ){
     string path;
@@ -2648,7 +3023,7 @@ void unmount(string id){
             break;
         }
     }
-    cout<<"///////"<<dato<<endl;
+    //cout<<"///////"<<dato<<endl;
     
     arregloMountId[dato].erase(0);
     arregloMountPart[dato].erase(0);

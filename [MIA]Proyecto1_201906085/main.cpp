@@ -555,7 +555,8 @@ void commando(char *command){
         
     }
 
-    reportes(a_rep);    
+    reportes(a_rep); 
+    //cout<<"jeje"<<endl;   
 
     
     

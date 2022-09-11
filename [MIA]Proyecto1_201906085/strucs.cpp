@@ -5,20 +5,17 @@ using namespace std;
 
 
 
+
 typedef struct tablaInodos{
-    string id;
     int i_uid;
     int i_gid;
     int i_size;
     time_t i_atime;
     time_t i_ctime;
     time_t i_mtime;
-    typedef struct bloque{
-        char b_name[12];
-        tablaInodos *tinodo;
-    };
-    bloque i_block[12];
+    int i_block[12];
     char i_type;
+    int i_perm ;
 
 };
 

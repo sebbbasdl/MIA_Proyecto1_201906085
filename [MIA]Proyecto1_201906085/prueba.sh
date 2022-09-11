@@ -23,6 +23,5 @@ mounT -path->"/home/sebbbasdl/archivos/fase1/D1.dsk" -name->PRI3
 
 
 MkfS -id->851D1 -type->fast
-
-login -usr->root -pass->123 -id->851D1
+rep -name->block -id->851D1 -path->"/home/sebbbasdl/Documentos/reporte5.jpg"
 
